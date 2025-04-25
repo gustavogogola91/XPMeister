@@ -4,12 +4,12 @@ const DefaultHeader = () => {
 
     return (
         <>
-            <div className="w-full max-h-[80px] flex flex-row items-center justify-between px-18">
+            <div className="w-full shadow flex flex-col gap-1 items-center justify-between px-18 pb-4 md:flex-row md:pb-0">
                 <p className="logo text-purple"><span className="text-[60px] font-black">XP</span>Meister</p>
-                <div className="flex flex-row gap-10">
-                    <a href="*" className="text-xl font-semibold">Sobre</a>
-                    <a href="*" className="text-xl font-semibold">Contato</a>
-                    <a href="*" className="text-xl font-semibold">Entrar</a>
+                <div className="flex flex-row text-[18px] gap-10">
+                    <a href="*" className="font-semibold">Sobre</a>
+                    <a href="*" className="font-semibold">Contato</a>
+                    <a href="*" className="font-semibold">Entrar</a>
                 </div>
             </div>
         </>
