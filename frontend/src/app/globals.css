@@ -55,6 +55,12 @@
     font-size: 40px;
     font-weight: 500;
   }
+
+  .card-landing-page{
+    background-color: var(--color-gray-alpha);
+
+    height: 150px;
+  }
 }
 
  body {
