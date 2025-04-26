@@ -1,6 +1,7 @@
 import LandingPage from "./Pages/LandingPage";
 import Header from "./Components/Header";
 import './globals.css'; 
+import AulasPage from "./Pages/AulasPage";
 
 
 export default function Home() {
@@ -9,7 +10,7 @@ export default function Home() {
 
       <body>
         <Header />
-        <LandingPage />
+        <AulasPage />
       </body>
     </html>
   );
