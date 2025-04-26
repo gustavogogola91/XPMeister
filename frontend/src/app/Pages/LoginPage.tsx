@@ -5,7 +5,7 @@ export default function Login() {
             <h2 className="text-4xl text-purple font-bold underline mb-4">BEM-VINDO</h2>
             <p className="text-center mb-8 text-base">Faça o login para continuar sua <span className="text-purple">jornada de aprendizado!!</span></p>
             <FormLogin/>
-            <p className="mt-6 text-sm">Não tem conta? <a href="#" className="font-bold hover:underline">cadastre-se </a> </p>
+            <p className="mt-6 text-sm">Não tem conta? <a href="#" className="font-bold hover:underline">Cadastre-se</a></p>
         </div>
       </div>
     );
@@ -15,7 +15,7 @@ export default function Login() {
   function FormLogin() {
     return (
         <>
-        <form className="login-form flex flex-col w-full max-w-xs gap-4">
+        <form className="base-form flex flex-col w-full max-w-xs gap-4">
             <input type="email" placeholder="Email" className="" required/>
             <input type="password" placeholder="Senha" className="" required/>
             <button type="submit" className="btn-primary py-2 text-[16px] font-bold"> Entrar </button>
