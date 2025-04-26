@@ -2,8 +2,8 @@ export default function Login() {
     return (
       <div className="flex flex-col gap-10 items-center mb-20">
         <div className="flex flex-col items-center justify-center flex-1 p-6">
-            <h2 className="text-4xl text-purple font-bold underline mb-4">BEM-VINDO</h2>
-            <p className="text-center mb-8 text-base">Faça o login para continuar sua <span className="text-purple">jornada de aprendizado!!</span></p>
+            <h2 className="text-4xl text-purple font-black underline mb-4">BEM-VINDO</h2>
+            <p className="text-center mb-8 text-base">Faça o login para continuar sua <span className="font-bold text-purple">jornada de aprendizado!!</span></p>
             <FormLogin/>
             <p className="mt-6 text-sm">Não tem conta? <a href="#" className="font-bold hover:underline">Cadastre-se</a></p>
         </div>
