@@ -17,6 +17,53 @@ export default function RegisterPage() {
     );
   }
 
+  async function postUsuario(nome: string, email: string, senha: string) {
+    try {
+        const response = await fetch(`${apiUrl}/usuario`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+            },
+            body: JSON.stringify({ nome, email, senha }),
+        });
+
+        if (!response.ok) {
+            console.log("Erro ao cadastrar usuário, problema de algum fudido que fez tua API!");
+        }
+        else {
+            console.log("De alguma forma essa poha funcionou, parabéns Isaac por fazer o minimo!");
+        }
+    }
+    catch (error) {
+        console.error("Erro:", error);
+        console.log("Aconteceu alguma pica ai, se vira!");
+    }
+  }
+
+  async function getUsuarios(email: string) {
+    try {
+        const response = await fetch(`${apiUrl}/usuario/email/${email}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+            },
+        });
+
+        if (!response.ok) {
+            console.log("Nenhum Usuário está usando esse email, Fé!");
+            return null;
+        }
+        else {
+            const data = await response.json();
+            console.log("Já tem um conta criada com esse teu email aí parça, lute!", data);
+            return data;
+        }
+    }
+    catch (error) {
+        console.error("Erro:", error);
+        console.log("Aconteceu alguma pica ai, se vira!");
+    }
+    }
 
   function FormRegister() {
     const [registerData, setRegisterData] = useState({
@@ -38,31 +85,14 @@ export default function RegisterPage() {
             alert("As senhas não coincidem seu símio burro!");
             return;
         }
-
-        try {
-            const response = await fetch(`${apiUrl}/usuario`, {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                },
-                body: JSON.stringify({
-                    nome: registerData.nome,
-                    email: registerData.email,
-                    senha: registerData.senha
-                })
-            });
-
-            if (!response.ok) {
-                alert("Erro ao cadastrar usuário, problema de algum fudido que fez tua API!");
-            }
-            else {
-                alert("De alguma forma essa poha funcionou, parabéns Isaac por fazer o minimo!");
-            }
+    
+        var usuario = await getUsuarios(registerData.email);
+        if (usuario !== null) {
+            alert("Esse email já está cadastrado, seu símio burro!");
+            return;
         }
-        catch (error) {
-            console.error("Erro:", error);
-            alert("Aconteceu alguma pica ai, se vira!");
-        }
+        await postUsuario(registerData.nome, registerData.email, registerData.senha);
+    
     };
 
     return (
@@ -77,3 +107,7 @@ export default function RegisterPage() {
         </>
     );
   }
+
+
+
+  // Continuar parte da autenticacao

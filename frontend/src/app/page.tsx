@@ -11,8 +11,8 @@ export default function Home() {
 
       <body>
         <Header />
-        <RegisterPage />
-        {/* <LoginPage /> */}
+        {/* <RegisterPage /> */}
+        <LoginPage />
         {/* <LandingPage /> */}
       </body>
     </html>

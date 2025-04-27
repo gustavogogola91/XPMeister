@@ -29,6 +29,23 @@ namespace Backend.Controller
             return Created("Usuario criado com sucesso", usuario);
         }
 
+        [HttpPost("login")]
+        public async Task<ActionResult> LoginUsuario([FromBody] Usuario usuario)
+        {
+            if (usuario == null || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.Senha))
+            {
+                return BadRequest("Email ou Senha Inválidos!");
+            }
+            
+            var usuario_ = await _appDbContext.Usuarios.FirstOrDefaultAsync(u => u.Email == usuario.Email && u.Senha == usuario.Senha);
+
+            if (usuario_ == null)
+            {
+                return NotFound("Usuário não encontrado no DB!");
+            }
+            return Ok(new { usuario_.Id, usuario_.Nome });
+        }
+
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
@@ -44,6 +61,19 @@ namespace Backend.Controller
         public async Task<ActionResult<Usuario>> GetUsuarios(int id)
         {
             var usuario = await _appDbContext.Usuarios.FindAsync(id);
+
+            if (usuario == null)
+            {
+                return NotFound("Usuário não encontrado amigão!");
+            }
+
+            return Ok(usuario);
+        }
+
+        [HttpGet("email/{email}")]
+        public async Task<ActionResult<Usuario>> GetUsuariosEmail(string email)
+        {
+            var usuario = await _appDbContext.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
 
             if (usuario == null)
             {
