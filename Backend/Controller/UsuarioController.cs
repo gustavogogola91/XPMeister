@@ -58,7 +58,7 @@ namespace Backend.Controller
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuarios(int id)
+        public async Task<ActionResult<Usuario>> GetUsuariosId(int id)
         {
             var usuario = await _appDbContext.Usuarios.FindAsync(id);
 
