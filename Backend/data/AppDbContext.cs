@@ -10,6 +10,8 @@ namespace Backend.data
 
         public DbSet<Usuario> Usuarios { get; set; }
 
+        public DbSet<Aula> tb_aula { get; set; }
+
         public DbSet<Modulo> tb_modulo { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
