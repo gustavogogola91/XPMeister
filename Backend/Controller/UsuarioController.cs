@@ -1,12 +1,10 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Backend.data;
+using Backend.Data;
 using Backend.Models;
-using Backend.Model;
-using System.Security.Claims;
-using System.IdentityModel.Tokens.Jwt;
-using Microsoft.IdentityModel.Tokens;
-using System.Text;
+using Backend.Model.DTOs;
+using Backend.Services;
+using AutoMapper;
 
 namespace Backend.Controller
 {
@@ -16,11 +14,17 @@ namespace Backend.Controller
     {
         private readonly AppDbContext _appDbContext;
         private readonly IConfiguration _config;
+        private readonly IEncryptService _hasher;
+        private readonly IMapper _mapper;
+        private readonly IJwtService _jwtService;
 
-        public UsuarioController(AppDbContext appDbContext, IConfiguration config)
+        public UsuarioController(AppDbContext appDbContext, IConfiguration config, IEncryptService hasher, IMapper mapper, IJwtService jwtService)
         {
             _appDbContext = appDbContext;
             _config = config;
+            _hasher = hasher;
+            _mapper = mapper;
+            _jwtService = jwtService;
         }
 
         [HttpPost]
@@ -33,6 +37,8 @@ namespace Backend.Controller
 
             try
             {
+
+                usuario.Senha = _hasher.HashUserPassword(usuario.Senha!);
                 _appDbContext.tb_usuario.Add(usuario);
                 await _appDbContext.SaveChangesAsync();
                 return Created("Usuario criado com sucesso", usuario);
@@ -49,21 +55,14 @@ namespace Backend.Controller
             try
             {
                 var usuario = await _appDbContext.tb_usuario.FirstOrDefaultAsync(u => u.Email == model.Email);
-                if (usuario != null /*TODO: Implementar metodo de verificação de senha, utilizando BCrypt*/)
-                {
-                    var authClaims = new List<Claim> {
-                            new Claim(JwtRegisteredClaimNames.Sub, usuario.Nome!),
-                            new Claim(JwtRegisteredClaimNames.Jti, Guid.NewGuid().ToString()),
-                            new Claim(ClaimTypes.Role, usuario.Role.ToString())
-                        };
 
-                    var token = new JwtSecurityToken(
-                    issuer: _config["Jwt:Issuer"],
-                    expires: DateTime.UtcNow.AddMinutes(double.Parse(_config["Jwt:ExpiryMinutes"]!)),
-                    claims: authClaims,
-                    signingCredentials: new SigningCredentials(new SymmetricSecurityKey(Encoding.UTF8.GetBytes(_config["Jwt:Key"]!)), SecurityAlgorithms.HmacSha256)
-                );
-                    return Ok(new { Token = new JwtSecurityTokenHandler().WriteToken(token) });
+                if (usuario != null && _hasher.CheckPassword(model.Senha!, usuario.Senha!))
+                {
+                    var usuarioJwtDTO = _mapper.Map<UsuarioJwtDTO>(usuario);
+
+                    var token = _jwtService.GenerateToken(usuarioJwtDTO);
+
+                    return Ok(new { token = token});
                 }
                 return Unauthorized();
             }
