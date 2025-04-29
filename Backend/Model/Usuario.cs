@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Backend.Model;
 
 namespace Backend.Models
 {
@@ -9,19 +10,13 @@ namespace Backend.Models
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; private set; }
         [Required(ErrorMessage = "O campo é obrigatório.")]
-        public string Nome { get; set; }
+        public string? Nome { get; set; }
         [Required(ErrorMessage = "O campo é obrigatório.")]
-        public string Email { get; set; }
+        public string? Email { get; set; }
         [Required(ErrorMessage = "O campo é obrigatório.")]
-        public string Senha { get; set; }
-        public string Role { get; private set; }
+        public string? Senha { get; set; }
+        public Roles Role { get; private set; }
         public bool Ativo { get; private set; }
-
-        public Usuario()
-        {
-            Role = "plebe";
-            Ativo = true;
-        }
 
     }
 }
