@@ -1,8 +1,8 @@
-namespace Backend.Model
+namespace Backend.Model.DTOs
 {
     public class LoginDTO
     {
         public string? Email { get; set; }
-        public string? Password { get; set; }
+        public string? Senha { get; set; }
     }
 }

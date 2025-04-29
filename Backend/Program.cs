@@ -1,6 +1,7 @@
 using System.Text;
 using System.Text.Json.Serialization;
-using Backend.data;
+using Backend.Data;
+using Backend.Services;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -18,6 +19,11 @@ builder.Services.AddCors(options =>
 });
 
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DbConnectionString")));
+
+builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+
+builder.Services.AddScoped<IEncryptService, EncryptService>();
+builder.Services.AddScoped<IJwtService, JwtService>();
 
 builder.Services.AddControllers().AddJsonOptions(options =>
     {
