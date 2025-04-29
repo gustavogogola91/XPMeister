@@ -21,6 +21,7 @@ namespace Backend.data
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Usuario>().Property(u => u.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Aula>().Property(a => a.Id).ValueGeneratedOnAdd();
         }
 
     }

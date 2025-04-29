@@ -7,7 +7,7 @@ namespace Backend.Models
     {
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int Id { get; set; }
+        public int Id { get; private set; }
         [Required(ErrorMessage = "IdModulo é obrigatório")]
         public int IdModulo { get; set; }
         [Required(ErrorMessage = "Número da Sequência é obrigatório")]
