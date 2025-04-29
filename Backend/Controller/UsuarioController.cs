@@ -1,119 +1,180 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Backend.data;
+using Backend.Data;
 using Backend.Models;
+using Backend.Model.DTOs;
+using Backend.Services;
+using AutoMapper;
 
 namespace Backend.Controller
 {
     [ApiController]
-    [Route("[controller]")]
+    [Route("usuario")]
     public class UsuarioController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
+        private readonly IConfiguration _config;
+        private readonly IEncryptService _hasher;
+        private readonly IMapper _mapper;
+        private readonly IJwtService _jwtService;
 
-        public UsuarioController(AppDbContext appDbContext)
+        public UsuarioController(AppDbContext appDbContext, IConfiguration config, IEncryptService hasher, IMapper mapper, IJwtService jwtService)
         {
             _appDbContext = appDbContext;
+            _config = config;
+            _hasher = hasher;
+            _mapper = mapper;
+            _jwtService = jwtService;
         }
 
         [HttpPost]
-        public async Task<ActionResult> AddUsuario([FromBody] Usuario usuario)
+        public async Task<IActionResult> AddUsuario([FromBody] Usuario usuario)
         {
-            if (usuario == null)
+            if (!ModelState.IsValid)
             {
                 return BadRequest("Usuário inválido!");
             }
 
-            _appDbContext.Usuarios.Add(usuario);
-            await _appDbContext.SaveChangesAsync();
-            return Created("Usuario criado com sucesso", usuario);
+            try
+            {
+
+                usuario.Senha = _hasher.HashUserPassword(usuario.Senha!);
+                _appDbContext.tb_usuario.Add(usuario);
+                await _appDbContext.SaveChangesAsync();
+                return Created("Usuario criado com sucesso", usuario);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpPost("login")]
-        public async Task<ActionResult> LoginUsuario([FromBody] Usuario usuario)
+        public async Task<ActionResult> LoginUsuario([FromBody] LoginDTO model)
         {
-            if (usuario == null || string.IsNullOrEmpty(usuario.Email) || string.IsNullOrEmpty(usuario.Senha))
+            try
             {
-                return BadRequest("Email ou Senha Inválidos!");
-            }
-            
-            var usuario_ = await _appDbContext.Usuarios.FirstOrDefaultAsync(u => u.Email == usuario.Email && u.Senha == usuario.Senha);
+                var usuario = await _appDbContext.tb_usuario.FirstOrDefaultAsync(u => u.Email == model.Email);
 
-            if (usuario_ == null)
-            {
-                return NotFound("Usuário não encontrado no DB!");
+                if (usuario != null && _hasher.CheckPassword(model.Senha!, usuario.Senha!))
+                {
+                    var usuarioJwtDTO = _mapper.Map<UsuarioJwtDTO>(usuario);
+
+                    var token = _jwtService.GenerateToken(usuarioJwtDTO);
+
+                    return Ok(new { token = token});
+                }
+                return Unauthorized();
             }
-            return Ok(new { usuario_.Id, usuario_.Nome });
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
         {
-            var usuarios = await _appDbContext.Usuarios.ToListAsync();
-            if (usuarios == null || !usuarios.Any())
+            try
             {
-                return NotFound("Sem usuários cadastrados pai!");
+                var usuarios = await _appDbContext.tb_usuario.ToListAsync();
+                if (usuarios == null || !usuarios.Any())
+                {
+                    return NotFound("Sem usuários no sistema");
+                }
+                return Ok(usuarios);
             }
-            return Ok(usuarios);
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpGet("{id}")]
         public async Task<ActionResult<Usuario>> GetUsuarios(int id)
         {
-            var usuario = await _appDbContext.Usuarios.FindAsync(id);
-
-            if (usuario == null)
+            try
             {
-                return NotFound("Usuário não encontrado amigão!");
-            }
+                var usuario = await _appDbContext.tb_usuario.FindAsync(id);
 
-            return Ok(usuario);
+                if (usuario == null)
+                {
+                    return NotFound("Usuário não encontrado");
+                }
+
+                return Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpGet("email/{email}")]
         public async Task<ActionResult<Usuario>> GetUsuariosEmail(string email)
         {
-            var usuario = await _appDbContext.Usuarios.FirstOrDefaultAsync(u => u.Email == email);
-
-            if (usuario == null)
+            try
             {
-                return NotFound("Usuário não encontrado amigão!");
-            }
+                var usuario = await _appDbContext.tb_usuario.FirstOrDefaultAsync(u => u.Email == email);
 
-            return Ok(usuario);
+                if (usuario == null)
+                {
+                    return NotFound("Usuário não encontrado");
+                }
+
+                return Ok(usuario);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUsuario(int id,[FromBody] Usuario usuario)
+        public async Task<IActionResult> UpdateUsuario(int id, [FromBody] Usuario usuario)
         {
-            var usuarioExistente = await _appDbContext.Usuarios.FindAsync(id);
-
-            if (usuarioExistente == null)
+            try
             {
-                return NotFound("Encontramos esse cara aí não!");
+                var usuarioExistente = await _appDbContext.tb_usuario.FindAsync(id);
+
+                if (usuarioExistente == null)
+                {
+                    return NotFound("Usuario não encontrado");
+                }
+
+                usuarioExistente.Nome = usuario.Nome;
+                usuarioExistente.Email = usuario.Email;
+                usuarioExistente.Senha = usuario.Senha;
+
+                await _appDbContext.SaveChangesAsync();
+                return Ok("Informações atualizadas!");
             }
-
-            usuarioExistente.Nome = usuario.Nome;
-            usuarioExistente.Email = usuario.Email;
-            usuarioExistente.Senha = usuario.Senha;
-
-            await _appDbContext.SaveChangesAsync();
-            return Ok("Informações do rapaz foram atualizadas(eu acho)!");
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
 
         [HttpDelete("{id}")]
         public async Task<IActionResult> DeleteUsuario(int id)
         {
-            var usuario = await _appDbContext.Usuarios.FindAsync(id);
-
-            if (usuario == null)
+            try
             {
-                return NotFound("Esse cara não existe poha!");
-            }
+                var usuario = await _appDbContext.tb_usuario.FindAsync(id);
 
-            _appDbContext.Usuarios.Remove(usuario);
-            await _appDbContext.SaveChangesAsync();
-            return Ok("Ele foi deletado, mas não se preocupe, ele não era tão legal assim!");
+                if (usuario == null)
+                {
+                    return NotFound("Usuário não encontrado");
+                }
+
+                _appDbContext.tb_usuario.Remove(usuario);
+                await _appDbContext.SaveChangesAsync();
+                return Ok("Deletado com successo");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
         }
     }
 }

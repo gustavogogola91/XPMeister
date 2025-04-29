@@ -2,13 +2,13 @@ using Microsoft.EntityFrameworkCore;
 using Backend.Models;
 using Backend.Model;
 
-namespace Backend.data
+namespace Backend.Data
 {
     public class AppDbContext : DbContext
     {
         public AppDbContext(DbContextOptions options) : base(options) { }
 
-        public DbSet<Usuario> Usuarios { get; set; }
+        public DbSet<Usuario> tb_usuario { get; set; }
 
         public DbSet<Modulo> tb_modulo { get; set; }
 
@@ -16,6 +16,7 @@ namespace Backend.data
         {
 
             modelBuilder.HasPostgresEnum<Dificuldade>();
+            modelBuilder.HasPostgresEnum<Roles>();
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Usuario>().Property(u => u.Id).ValueGeneratedOnAdd();
