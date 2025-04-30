@@ -10,6 +10,8 @@ namespace Backend.Data
 
         public DbSet<Usuario> tb_usuario { get; set; }
 
+        public DbSet<Aula> tb_aula { get; set; }
+
         public DbSet<Modulo> tb_modulo { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -20,6 +22,7 @@ namespace Backend.Data
 
             base.OnModelCreating(modelBuilder);
             modelBuilder.Entity<Usuario>().Property(u => u.Id).ValueGeneratedOnAdd();
+            modelBuilder.Entity<Aula>().Property(a => a.Id).ValueGeneratedOnAdd();
         }
 
     }
