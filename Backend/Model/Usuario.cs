@@ -1,5 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using Backend.Model;
 
 namespace Backend.Models
 {
@@ -8,6 +9,7 @@ namespace Backend.Models
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; private set; }
+
         [Required(ErrorMessage = "Nome é obrigatório.")]
         public string? Nome { get; set; }
         [Required(ErrorMessage = "Email é obrigatório.")]
@@ -16,12 +18,6 @@ namespace Backend.Models
         public string? Senha { get; set; }
         public string? Role { get; private set; }
         public bool Ativo { get; private set; }
-
-        public Usuario()
-        {
-            Role = "plebe";
-            Ativo = true;
-        }
 
     }
 }
