@@ -4,6 +4,7 @@ import RegisterPage from "./Pages/RegisterPage";
 import Header from "./Components/Header";
 import './globals.css'; 
 import AulasPage from "./Pages/AulasPage";
+import AlunoConfigPage from "./Pages/AlunoConfigPage";
 
 
 export default function Home() {
@@ -14,7 +15,8 @@ export default function Home() {
         <Header />
         {/* <RegisterPage /> */}
         {/* <LoginPage /> */}
-        <LandingPage />
+        {/* <LandingPage /> */}
+        <AlunoConfigPage/>
         {/* <AulasPage /> */}
       </body>
     </html>
