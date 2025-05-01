@@ -16,7 +16,7 @@ namespace Backend.Models
         public string? Email { get; set; }
         [Required(ErrorMessage = "Senha é obrigatório.")]
         public string? Senha { get; set; }
-        public string? Role { get; private set; }
+        public Roles Role { get; private set; }
         public bool Ativo { get; private set; }
 
     }
