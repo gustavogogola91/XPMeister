@@ -37,7 +37,6 @@ namespace Backend.Controller
 
             try
             {
-
                 usuario.Senha = _hasher.HashUserPassword(usuario.Senha!);
                 _appDbContext.tb_usuario.Add(usuario);
                 await _appDbContext.SaveChangesAsync();
@@ -131,32 +130,40 @@ namespace Backend.Controller
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUsuario(int id, [FromBody] Usuario usuario)
+        public async Task<IActionResult> UpdateUsuario(int id, [FromBody] UsuarioPutDTO usuario)
         {
             try
             {
                 var usuarioExistente = await _appDbContext.tb_usuario.FindAsync(id);
 
-                if (usuarioExistente == null)
+                if (usuarioExistente != null)
                 {
-                    return NotFound("Usuario não encontrado");
-                }
-                if (usuario.Nome != null || usuario.Nome != string.Empty)
-                {
-                    usuarioExistente.Nome = usuario.Nome;
-                }
-                if (usuario.Email != null || usuario.Email != string.Empty)
-                {
-                    usuarioExistente.Email = usuario.Email;
-                }
-                if (usuario.Senha != null || usuario.Senha != string.Empty)
-                {
-                    usuarioExistente.Senha = _hasher.HashUserPassword(usuario.Email!);
-                }
+                    if (_hasher.CheckPassword(usuario.SenhaAtual!, usuarioExistente.Senha!))
+                    {
+                        if (usuarioExistente == null)
+                        {
+                            return NotFound("Usuario não encontrado");
+                        }
+                        if (usuario.Nome != null)
+                        {
+                            usuarioExistente.Nome = usuario.Nome;
+                        }
+                        if (usuario.Email != null)
+                        {
+                            usuarioExistente.Email = usuario.Email;
+                        }
+                        if (usuario.Senha != null)
+                        {
+                            usuarioExistente.Senha = _hasher.HashUserPassword(usuario.Senha);
+                        }
 
-
-                await _appDbContext.SaveChangesAsync();
-                return Ok("Informações atualizadas!");
+                        _appDbContext.tb_usuario.Update(usuarioExistente);
+                        await _appDbContext.SaveChangesAsync();
+                        return Ok("Informações atualizadas!");
+                    }
+                    return Unauthorized();
+                }
+                return NotFound("Usuario não encontrado");
             }
             catch (Exception ex)
             {
