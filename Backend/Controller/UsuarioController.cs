@@ -62,7 +62,7 @@ namespace Backend.Controller
 
                     var token = _jwtService.GenerateToken(usuarioJwtDTO);
 
-                    return Ok(new { token = token});
+                    return Ok(new { token = token });
                 }
                 return Unauthorized();
             }
@@ -141,10 +141,19 @@ namespace Backend.Controller
                 {
                     return NotFound("Usuario não encontrado");
                 }
+                if (usuario.Nome != null || usuario.Nome != string.Empty)
+                {
+                    usuarioExistente.Nome = usuario.Nome;
+                }
+                if (usuario.Email != null || usuario.Email != string.Empty)
+                {
+                    usuarioExistente.Email = usuario.Email;
+                }
+                if (usuario.Senha != null || usuario.Senha != string.Empty)
+                {
+                    usuarioExistente.Senha = _hasher.HashUserPassword(usuario.Email!);
+                }
 
-                usuarioExistente.Nome = usuario.Nome;
-                usuarioExistente.Email = usuario.Email;
-                usuarioExistente.Senha = usuario.Senha;
 
                 await _appDbContext.SaveChangesAsync();
                 return Ok("Informações atualizadas!");
