@@ -138,34 +138,36 @@ namespace Backend.Controller
 
                 if (usuarioExistente != null)
                 {
-                    if (true)
+
+                    if (usuario.Nome != null)
                     {
-                        if (usuarioExistente == null)
-                        {
-                            return NotFound("Usuario não encontrado");
-                        }
-                        if (usuario.Nome != null)
-                        {
-                            usuarioExistente.Nome = usuario.Nome;
-                        }
-                        if (usuario.Email != null)
+                        usuarioExistente.Nome = usuario.Nome;
+                    }
+                    if (usuario.Email != null)
+                    {
+                        if (_hasher.CheckPassword(usuario.Senha!, usuarioExistente.Senha!))
                         {
                             usuarioExistente.Email = usuario.Email;
                         }
-                        if (usuario.Senha != null)
+                        else { return Unauthorized(); }
+                    }
+                    if (usuario.Senha != null)
+                    {
+                        if (_hasher.CheckPassword(usuario.Senha!, usuarioExistente.Senha!))
                         {
                             usuarioExistente.Senha = _hasher.HashUserPassword(usuario.Senha);
                         }
-                        if (usuario.estudo != null)
-                        {
-                            usuarioExistente.estudo = usuario.estudo;
-                        }
+                        else { return Unauthorized(); }
 
-                        _appDbContext.tb_usuario.Update(usuarioExistente);
-                        await _appDbContext.SaveChangesAsync();
-                        return Ok("Informações atualizadas!");
                     }
-                    return Unauthorized();
+                    if (usuario.estudo != null)
+                    {
+                        usuarioExistente.estudo = usuario.estudo;
+                    }
+
+                    _appDbContext.tb_usuario.Update(usuarioExistente);
+                    await _appDbContext.SaveChangesAsync();
+                    return Ok("Informações atualizadas!");
                 }
                 return NotFound("Usuario não encontrado");
             }
