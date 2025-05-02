@@ -2,7 +2,7 @@
 
 import { useState } from "react";
 
-var apiUrl = "http://localhost:5017";
+const apiUrl = "http://localhost:5017";
 
 export default function AlunoConfigPage() {
   const [configPage, setConfigPage] = useState({ page: "senha" });
@@ -11,6 +11,7 @@ export default function AlunoConfigPage() {
     novo: "",
     confirma: "",
   });
+
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setAlteracao({ ...alteracao, [name]: value });
@@ -24,11 +25,7 @@ export default function AlunoConfigPage() {
             className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
             onClick={() => {
               setConfigPage({ page: "senha" });
-              setAlteracao({
-                senha: "",
-                novo: "",
-                confirma: "",
-              });
+              setAlteracao({ senha: "", novo: "", confirma: "" });
             }}
           >
             Alterar Senha
@@ -37,11 +34,7 @@ export default function AlunoConfigPage() {
             className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
             onClick={() => {
               setConfigPage({ page: "email" });
-              setAlteracao({
-                senha: "",
-                novo: "",
-                confirma: "",
-              });
+              setAlteracao({ senha: "", novo: "", confirma: "" });
             }}
           >
             Alterar Email
@@ -50,27 +43,10 @@ export default function AlunoConfigPage() {
             className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
             onClick={() => {
               setConfigPage({ page: "estudo" });
-              setAlteracao({
-                senha: "",
-                novo: "",
-                confirma: "",
-              });
+              setAlteracao({ senha: "", novo: "", confirma: "" });
             }}
           >
             Personalizar estudo
-          </li>
-          <li
-            className="px-4 py-2 hover:bg-gray-100 cursor-pointer"
-            onClick={() => {
-              setConfigPage({ page: "modulo" });
-              setAlteracao({
-                senha: "",
-                novo: "",
-                confirma: "",
-              });
-            }}
-          >
-            Refazer módulo
           </li>
         </ul>
       </aside>
@@ -86,7 +62,9 @@ export default function AlunoConfigPage() {
           handleChange={handleChange}
           alterarSenha={alterarSenha}
           alterarEmail={alterarEmail}
+          alterarEstudo={alterarEstudo}
         />
+
         <div
           id="Erro"
           className="mt-10 text-center text-red-600 uppercase font-bold w-50 m-auto rounded-2xl p-5"
@@ -96,40 +74,33 @@ export default function AlunoConfigPage() {
   );
 
   async function alterarSenha() {
-    var errorLayout = document.getElementById("Erro");
-    if (alteracao.confirma === alteracao.novo) {
-      var novo = alteracao.novo;
-      var senha = alteracao.senha;
+    const errorLayout = document.getElementById("Erro");
 
+    if (alteracao.confirma === alteracao.novo) {
       try {
         const response = await fetch(`${apiUrl}/usuario/1`, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ SenhaAtual: senha, Senha: novo }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            SenhaAtual: alteracao.senha,
+            Senha: alteracao.novo,
+          }),
         });
 
-        setAlteracao({
-          senha: "",
-          novo: "",
-          confirma: "",
-        });
-
+        setAlteracao({ senha: "", novo: "", confirma: "" });
         console.log(response);
 
         if (response.ok) {
           errorLayout!.innerText = "";
           errorLayout!.classList.remove("bg-red-300");
-          return;
-        } else if (response.status == 401) {
+        } else if (response.status === 401) {
           errorLayout!.innerText = "Senha incorreta";
           errorLayout!.classList.add("bg-red-300");
         } else {
           errorLayout!.innerText = response.statusText;
           errorLayout!.classList.add("bg-red-300");
         }
-      } catch (error) {
+      } catch {
         return null;
       }
     } else {
@@ -138,41 +109,42 @@ export default function AlunoConfigPage() {
     }
   }
 
-  async function alterarEmail() {
-    var errorLayout = document.getElementById("Erro");
-    if (alteracao.confirma === alteracao.novo) {
-      var novo = alteracao.novo;
-      var senha = alteracao.senha;
+  async function alterarEstudo() {
+    const dias = document.getElementsByName("dias");
+    dias.forEach((dia) => {
+      //TODOÇ implementar lógica para alterar estudo
+    });
+    console.log(dias);
+  }
 
+  async function alterarEmail() {
+    const errorLayout = document.getElementById("Erro");
+
+    if (alteracao.confirma === alteracao.novo) {
       try {
         const response = await fetch(`${apiUrl}/usuario/1`, {
           method: "PUT",
-          headers: {
-            "Content-Type": "application/json",
-          },
-          body: JSON.stringify({ SenhaAtual: senha, Email: novo }),
+          headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            SenhaAtual: alteracao.senha,
+            Email: alteracao.novo,
+          }),
         });
 
-        setAlteracao({
-          senha: "",
-          novo: "",
-          confirma: "",
-        });
-
+        setAlteracao({ senha: "", novo: "", confirma: "" });
         console.log(response);
 
         if (response.ok) {
           errorLayout!.innerText = "";
           errorLayout!.classList.remove("bg-red-300");
-          return;
-        } else if (response.status == 401) {
+        } else if (response.status === 401) {
           errorLayout!.innerText = "Senha incorreta";
           errorLayout!.classList.add("bg-red-300");
         } else {
           errorLayout!.innerText = response.statusText;
           errorLayout!.classList.add("bg-red-300");
         }
-      } catch (error) {
+      } catch {
         return null;
       }
     } else {
@@ -187,13 +159,15 @@ function Page({
   alteracao,
   handleChange,
   alterarSenha,
-  alterarEmail
+  alterarEmail,
+  alterarEstudo,
 }: {
   configPage: { page: string };
   alteracao: { senha: string; novo: string; confirma: string };
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   alterarSenha: () => void;
   alterarEmail: () => void;
+  alterarEstudo: () => void;
 }) {
   if (configPage.page == "senha") {
     return (
@@ -312,6 +286,81 @@ function Page({
           className="mt-4 bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded shadow transition"
         >
           Alterar email
+        </button>
+      </form>
+    );
+  } else if (configPage.page == "estudo") {
+    return (
+      <form
+        className="flex flex-1 flex-col items-center"
+        onSubmit={(e) => {
+          e.preventDefault();
+          alterarEstudo();
+        }}
+      >
+        <h3 className="uppercase text-purple font-bold">
+          Personalizar tempo de estudo
+        </h3>
+        <div className="flex flex-1 m-16">
+          <ul className="flex flex-1 flex-col space-y-3 md:flex-row md:space-x-6">
+            <li>
+              <input type="checkbox" name="dias" id="segunda" />
+              <label htmlFor="segunda" className="ml-2">
+                Segunda
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" name="dias" id="terca" />
+              <label htmlFor="terca" className="ml-2">
+                Terça
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" name="dias" id="quarta" />
+              <label htmlFor="quarta" className="ml-2">
+                Quarta
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" name="dias" id="quinta" />
+              <label htmlFor="quinta" className="ml-2">
+                Quinta
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" name="dias" id="sexta" />
+              <label htmlFor="sexta" className="ml-2">
+                Sexta
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" name="dias" id="sabado" />
+              <label htmlFor="sabado" className="ml-2">
+                Sabado
+              </label>
+            </li>
+            <li>
+              <input type="checkbox" name="dias" id="domingo" />
+              <label htmlFor="domingo" className="ml-2">
+                Domingo
+              </label>
+            </li>
+          </ul>
+        </div>
+        <div className="flex flex-col items-center no">
+          <label htmlFor="horas">Quantas horas deseja estudar (por dia)</label>
+          <input
+            type="number"
+            id="horas"
+            required
+            className="no-spinner border-1 rounded-2xl focus:outline-none focus:ring-2 focus:ring-purple p-1 mt-4"
+          />
+        </div>
+        <button
+          type="submit"
+          className="bg-purple-600 hover:bg-purple-700 text-white px-6 py-2 rounded shadow transition mt-12"
+        >
+          Salvar
         </button>
       </form>
     );

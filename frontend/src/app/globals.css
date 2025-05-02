@@ -111,3 +111,13 @@
   color: var(--foreground);
   font-family: "Inter", sans-serif;
  }
+
+input[type='number'].no-spinner::-webkit-inner-spin-button,
+input[type='number'].no-spinner::-webkit-outer-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+input[type='number'].no-spinner {
+  -moz-appearance: textfield;
+}
