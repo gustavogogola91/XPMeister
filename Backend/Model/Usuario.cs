@@ -1,8 +1,7 @@
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using Backend.Model;
 
-namespace Backend.Models
+namespace Backend.Model
 {
     public class Usuario
     {
@@ -18,6 +17,7 @@ namespace Backend.Models
         public string? Senha { get; set; }
         public Roles Role { get; private set; }
         public bool Ativo { get; private set; }
+        public TempoDeEstudo? estudo { get; set; }
 
     }
 }

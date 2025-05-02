@@ -4,6 +4,19 @@ import { useState } from "react";
 
 const apiUrl = "http://localhost:5017";
 
+type DiaSemana =
+  | "segunda"
+  | "terca"
+  | "quarta"
+  | "quinta"
+  | "sexta"
+  | "sabado"
+  | "domingo";
+
+type DiasSelecionados = {
+  [key in DiaSemana]: boolean;
+};
+
 export default function AlunoConfigPage() {
   const [configPage, setConfigPage] = useState({ page: "senha" });
   const [alteracao, setAlteracao] = useState({
@@ -11,10 +24,26 @@ export default function AlunoConfigPage() {
     novo: "",
     confirma: "",
   });
+  const [diasSelecionados, setDiasSelecionados] = useState({
+    segunda: false,
+    terca: false,
+    quarta: false,
+    quinta: false,
+    sexta: false,
+    sabado: false,
+    domingo: false,
+  });
 
   const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
     const { name, value } = e.target;
     setAlteracao({ ...alteracao, [name]: value });
+  };
+
+  const handleChangeCheckbox = (dia: DiaSemana) => {
+    setDiasSelecionados((prev) => ({
+      ...prev,
+      [dia]: !prev[dia],
+    }));
   };
 
   return (
@@ -59,7 +88,9 @@ export default function AlunoConfigPage() {
         <Page
           configPage={configPage}
           alteracao={alteracao}
+          diaSelecionado={diasSelecionados}
           handleChange={handleChange}
+          handleChangeCheckbox={handleChangeCheckbox}
           alterarSenha={alterarSenha}
           alterarEmail={alterarEmail}
           alterarEstudo={alterarEstudo}
@@ -110,11 +141,7 @@ export default function AlunoConfigPage() {
   }
 
   async function alterarEstudo() {
-    const dias = document.getElementsByName("dias");
-    dias.forEach((dia) => {
-      //TODOÇ implementar lógica para alterar estudo
-    });
-    console.log(dias);
+    //TODO: Criar requisição
   }
 
   async function alterarEmail() {
@@ -157,6 +184,8 @@ export default function AlunoConfigPage() {
 function Page({
   configPage,
   alteracao,
+  diaSelecionado,
+  handleChangeCheckbox,
   handleChange,
   alterarSenha,
   alterarEmail,
@@ -164,6 +193,16 @@ function Page({
 }: {
   configPage: { page: string };
   alteracao: { senha: string; novo: string; confirma: string };
+  diaSelecionado: {
+    segunda: boolean;
+    terca: boolean;
+    quarta: boolean;
+    quinta: boolean;
+    sexta: boolean;
+    sabado: boolean;
+    domingo: boolean;
+  };
+  handleChangeCheckbox: (dia: DiaSemana) => void;
   handleChange: (e: React.ChangeEvent<HTMLInputElement>) => void;
   alterarSenha: () => void;
   alterarEmail: () => void;
@@ -303,48 +342,19 @@ function Page({
         </h3>
         <div className="flex flex-1 m-16">
           <ul className="flex flex-1 flex-col space-y-3 md:flex-row md:space-x-6">
-            <li>
-              <input type="checkbox" name="dias" id="segunda" />
-              <label htmlFor="segunda" className="ml-2">
-                Segunda
-              </label>
-            </li>
-            <li>
-              <input type="checkbox" name="dias" id="terca" />
-              <label htmlFor="terca" className="ml-2">
-                Terça
-              </label>
-            </li>
-            <li>
-              <input type="checkbox" name="dias" id="quarta" />
-              <label htmlFor="quarta" className="ml-2">
-                Quarta
-              </label>
-            </li>
-            <li>
-              <input type="checkbox" name="dias" id="quinta" />
-              <label htmlFor="quinta" className="ml-2">
-                Quinta
-              </label>
-            </li>
-            <li>
-              <input type="checkbox" name="dias" id="sexta" />
-              <label htmlFor="sexta" className="ml-2">
-                Sexta
-              </label>
-            </li>
-            <li>
-              <input type="checkbox" name="dias" id="sabado" />
-              <label htmlFor="sabado" className="ml-2">
-                Sabado
-              </label>
-            </li>
-            <li>
-              <input type="checkbox" name="dias" id="domingo" />
-              <label htmlFor="domingo" className="ml-2">
-                Domingo
-              </label>
-            </li>
+            {(Object.keys(diaSelecionado) as DiaSemana[]).map((dia) => (
+              <li key={dia}>
+                <input
+                  type="checkbox"
+                  id={dia}
+                  checked={diaSelecionado[dia]}
+                  onChange={() => handleChangeCheckbox(dia)}
+                />
+                <label htmlFor={dia} className="ml-2 capitalize">
+                  {dia}
+                </label>
+              </li>
+            ))}
           </ul>
         </div>
         <div className="flex flex-col items-center no">
