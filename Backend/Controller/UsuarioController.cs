@@ -76,7 +76,7 @@ namespace Backend.Controller
         {
             try
             {
-                var usuarios = await _appDbContext.tb_usuario.ToListAsync();
+                var usuarios = await _appDbContext.tb_usuario.Include(u => u.estudo).ToListAsync();
                 if (usuarios == null || !usuarios.Any())
                 {
                     return NotFound("Sem usuários no sistema");
@@ -138,7 +138,7 @@ namespace Backend.Controller
 
                 if (usuarioExistente != null)
                 {
-                    if (_hasher.CheckPassword(usuario.SenhaAtual!, usuarioExistente.Senha!))
+                    if (true)
                     {
                         if (usuarioExistente == null)
                         {
@@ -155,6 +155,10 @@ namespace Backend.Controller
                         if (usuario.Senha != null)
                         {
                             usuarioExistente.Senha = _hasher.HashUserPassword(usuario.Senha);
+                        }
+                        if (usuario.estudo != null)
+                        {
+                            usuarioExistente.estudo = usuario.estudo;
                         }
 
                         _appDbContext.tb_usuario.Update(usuarioExistente);

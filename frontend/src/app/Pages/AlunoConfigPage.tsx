@@ -141,7 +141,29 @@ export default function AlunoConfigPage() {
   }
 
   async function alterarEstudo() {
-    //TODO: Criar requisição
+    var horas = (document.getElementById("horas") as HTMLInputElement).value;
+    try {
+      const response = await fetch(`${apiUrl}/usuario/1`, {
+        method: "PUT",
+        headers: { "Content-Type": "application/json" },
+          body: JSON.stringify({
+            tempoDeEstudo: {
+              segunda: diasSelecionados.segunda,
+              terca: diasSelecionados.terca,
+              quarta: diasSelecionados.quarta,
+              quinta: diasSelecionados.quinta,
+              sexta: diasSelecionados.sexta,
+              sabado: diasSelecionados.sabado,
+              domingo: diasSelecionados.domingo,
+              horasDiarias: horas
+            }
+          }),
+      });
+
+      console.log(response)
+    } catch (error) {
+      return null;
+    }
   }
 
   async function alterarEmail() {

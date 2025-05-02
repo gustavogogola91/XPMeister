@@ -7,6 +7,6 @@ namespace Backend.Model.DTOs
         public string? Email { get; set; }
         public string? Senha { get; set; }
         public Roles Role { get; private set; }
-        public TempoDeEstudo? tempoDeEstudo { get; set; }
+        public TempoDeEstudo? estudo { get; set; }
     }
 }
