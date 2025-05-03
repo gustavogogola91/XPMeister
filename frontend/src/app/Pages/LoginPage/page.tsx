@@ -1,9 +1,10 @@
 "use client";
 
-import { useContext, useState } from "react";
-import { AuthContext } from "../contexts/AuthContext";
-import { SignInData } from "../contexts/AuthContext";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../../contexts/AuthContext";
+import { SignInData } from "../../contexts/AuthContext";
 import { useRouter } from 'next/navigation'; // correct hook for App Router
+import { parseCookies } from "nookies";
 
 export default function Login() {
     return (
@@ -19,9 +20,20 @@ export default function Login() {
 }
 
 
-
 function FormLogin() {
     const router = useRouter();
+
+    const { 'auth-token': AuthToken } = parseCookies();
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+
+            if (AuthToken) {
+                router.push('/pages/AulasPage');
+            }
+        }
+    }, [router]);
+
 
     const { loginUsuario } = useContext(AuthContext);
 
@@ -38,19 +50,21 @@ function FormLogin() {
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
 
-        const loginRequestData : SignInData = {
+        const loginRequestData: SignInData = {
             email: loginData.email,
             senha: loginData.senha
         }
 
-        const success = await loginUsuario(loginRequestData) 
+        const success = await loginUsuario(loginRequestData)
 
         if (success) {
-            router.push('pages/AulasPage');
+            console.log(localStorage.getItem('AuthToken'));
+
+            router.push('/pages/AulasPage');
         } else {
             alert("Email ou senha inválidos!");
         }
-        
+
         // var usuario = await loginUsuario(loginData.email, loginData.senha);
         // if (usuario !== null) {
         //     alert("Parabens, você lembrou seu login (aqui n temos opção de recuperação, Guarde bem)!");

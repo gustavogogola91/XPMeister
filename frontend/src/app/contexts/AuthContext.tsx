@@ -70,6 +70,8 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             setCookie(undefined, 'auth-token', token, {
                 maxAge: 60 * 60 * 1, //1 hora para expirar
             })
+
+            // localStorage.setItem('AuthToken', token);
             IsAuthenticated = true
             return true;
         }
