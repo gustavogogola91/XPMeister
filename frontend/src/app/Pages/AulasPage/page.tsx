@@ -1,3 +1,5 @@
+"use client"
+
 const AulasPage = () => {
     return (
         <div className="flex flex-col my-10 md:my-0 md:flex-row items-center justify-between">

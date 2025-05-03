@@ -1,50 +1,30 @@
 "use client";
 
-import { useState } from "react";
-
-var apiUrl = "http://localhost:5017"
+import { useContext, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
+import { SignInData } from "../contexts/AuthContext";
+import { useRouter } from 'next/navigation'; // correct hook for App Router
 
 export default function Login() {
     return (
-      <div className="flex flex-col gap-10 items-center mb-20">
-        <div className="flex flex-col items-center justify-center flex-1 p-6">
-            <h2 className="text-4xl text-purple font-black underline mb-4">BEM-VINDO</h2>
-            <p className="text-center mb-8 text-base">Faça o login para continuar sua <span className="font-bold text-purple">jornada de aprendizado!!</span></p>
-            <FormLogin/>
-            <p className="mt-6 text-sm">Não tem conta? <a href="#" className="font-bold hover:underline">Cadastre-se</a></p>
+        <div className="flex flex-col gap-10 items-center mb-20">
+            <div className="flex flex-col items-center justify-center flex-1 p-6">
+                <h2 className="text-4xl text-purple font-black underline mb-4">BEM-VINDO</h2>
+                <p className="text-center mb-8 text-base">Faça o login para continuar sua <span className="font-bold text-purple">jornada de aprendizado!!</span></p>
+                <FormLogin />
+                <p className="mt-6 text-sm">Não tem conta? <a href="#" className="font-bold hover:underline">Cadastre-se</a></p>
+            </div>
         </div>
-      </div>
     );
-  }
+}
 
-  async function loginUsuario(email: string, senha: string) {
-    var nome = "dumpOne";
-    try {
-        const response = await fetch(`${apiUrl}/usuario/login`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-            },
-            body: JSON.stringify({ nome, email, senha }),
-        });
 
-        if (!response.ok) {
-            console.log("Erro ao autenticar usuário!");
-            return null;
-        }
 
-        const data = await response.json();
-        sessionStorage.setItem("usuarioId", data.id);
-        sessionStorage.setItem("usuarioNome", data.nome);
-        console.log("Usuário autenticado:", data.id, data.nome);
-        return data;
-    } catch (error) {
-        console.error("Erro:", error);
-        return null;
-    }
-    }
+function FormLogin() {
+    const router = useRouter();
 
-  function FormLogin() {
+    const { loginUsuario } = useContext(AuthContext);
+
     const [loginData, setLoginData] = useState({
         email: "",
         senha: ""
@@ -57,24 +37,36 @@ export default function Login() {
 
     const handleSubmit = async (e: React.FormEvent) => {
         e.preventDefault();
-    
-        var usuario = await loginUsuario(loginData.email, loginData.senha);
-        if (usuario !== null) {
-            alert("Parabens, você lembrou seu login (aqui n temos opção de recuperação, Guarde bem)!");
-            // Redirecionar para a página inicial ou outra página desejada
-            return;
+
+        const loginRequestData : SignInData = {
+            email: loginData.email,
+            senha: loginData.senha
         }
-    
-        };
+
+        const success = await loginUsuario(loginRequestData) 
+
+        if (success) {
+            router.push('pages/AulasPage');
+        } else {
+            alert("Email ou senha inválidos!");
+        }
+        
+        // var usuario = await loginUsuario(loginData.email, loginData.senha);
+        // if (usuario !== null) {
+        //     alert("Parabens, você lembrou seu login (aqui n temos opção de recuperação, Guarde bem)!");
+        //     // Redirecionar para a página inicial ou outra página desejada
+        //     return;
+        // }
+
+    };
 
     return (
         <>
-        <form className="base-form flex flex-col w-full max-w-xs gap-4" onSubmit={handleSubmit}>
-            <input name="email" type="email" placeholder="Email" className="" value={loginData.email} onChange={handleChange} required/>
-            <input name="senha" type="password" placeholder="Senha" className="" value={loginData.senha} onChange={handleChange} required/>
-            <button type="submit" className="btn-primary py-2 text-[16px] font-bold"> Entrar </button>
-        </form>
+            <form className="base-form flex flex-col w-full max-w-xs gap-4" onSubmit={handleSubmit}>
+                <input name="email" type="email" placeholder="Email" className="" value={loginData.email} onChange={handleChange} required />
+                <input name="senha" type="password" placeholder="Senha" className="" value={loginData.senha} onChange={handleChange} required />
+                <button type="submit" className="btn-primary py-2 text-[16px] font-bold"> Entrar </button>
+            </form>
         </>
     );
-  }
-  
+}
