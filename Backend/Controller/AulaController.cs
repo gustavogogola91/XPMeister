@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-using Backend.data;
-using Backend.Models;
+using Backend.Data;
+using Backend.Model;
 
 namespace Backend.Controller
 {
