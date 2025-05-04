@@ -1,24 +1,18 @@
-import LandingPage from "./Pages/LandingPage";
-import LoginPage from "./Pages/LoginPage";
-import RegisterPage from "./Pages/RegisterPage";
-import Header from "./Components/Header";
-import './globals.css'; 
-import AulasPage from "./Pages/AulasPage";
-import AlunoConfigPage from "./Pages/AlunoConfigPage";
+
+import LandingPage from "./pages/LandingPage/page";
+import LoginPage from "./pages/LoginPage/page";
+import RegisterPage from "./pages/RegisterPage/page";
+import './globals.css';
+
 
 
 export default function Home() {
   return (
-    <html>
-
-      <body>
-        <Header />
-        {/* <RegisterPage /> */}
-        {/* <LoginPage /> */}
-        {/* <LandingPage /> */}
-        <AlunoConfigPage/>
-        {/* <AulasPage /> */}
-      </body>
-    </html>
+    <>
+      {/* < LoginPage /> */}
+      {/* <RegisterPage /> */}
+      <LandingPage />
+      {/* <AulasPage /> */}
+    </>
   );
 }

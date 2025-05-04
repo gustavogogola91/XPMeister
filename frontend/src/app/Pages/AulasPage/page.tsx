@@ -1,4 +1,25 @@
+"use client"
+
+import { useRouter } from 'next/navigation';
+import { parseCookies } from 'nookies';
+import { useEffect } from 'react';
+
+
+
 const AulasPage = () => {
+    const router = useRouter();
+
+    const { 'auth-token': AuthToken } = parseCookies();
+
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            
+            if (!AuthToken) {
+                router.push('/pages/LoginPage');
+            }
+        }
+    }, [router]);
+
     return (
         <div className="flex flex-col my-10 md:my-0 md:flex-row items-center justify-between">
             <aside className="hidden md:inline w-77 border-2 border-purple-500 rounded h-[250px] p-4">
