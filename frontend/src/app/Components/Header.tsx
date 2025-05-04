@@ -33,7 +33,7 @@ const AuthenticatedHeader = () => {
                             <a href="*" className="font-semibold">Sobre</a>
                             <a href="*" className="font-semibold">Contato</a>
                             <button className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
-                                {isOpen ? <h2 className="w-8">X</h2>: <img src="/MenuIcon.png" className="w-8" alt="MenuIcon" />}
+                                {isOpen ? <h2 className="w-8 font-bold">X</h2>: <img src="/MenuIcon.png" className="w-8" alt="MenuIcon" />}
                             </button>
                             {isOpen && (
                                 <ul className="mt-4 absolute right-24 top-32 md:right-36 md:top-12 bg-white text-black rounded-xl shadow-xl py-4 px-4 space-y-2 z-50 transition-all duration-1300 ease-out">
