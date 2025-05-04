@@ -1,6 +1,8 @@
 "use client"
 
 import { parseCookies } from "nookies";
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 const DefaultHeader = () => {
 
@@ -47,16 +49,9 @@ const AuthenticatedHeader = () => {
 }
 
 const Header = () => {
-
-    const { 'auth-token': AuthToken } = parseCookies();
-    console.log(AuthToken);
-
-    //TODO Arrumar isso aqui nao atualiza
-    
-        if (AuthToken === undefined) {
-            return <DefaultHeader />;
-        }
-        return <AuthenticatedHeader />;
+    const { IsAuthenticated } = useContext(AuthContext);
+  
+    return IsAuthenticated ? <AuthenticatedHeader /> : <DefaultHeader />;
   };
   
   export default Header;

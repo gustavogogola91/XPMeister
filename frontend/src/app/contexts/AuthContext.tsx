@@ -1,6 +1,6 @@
 "use client"
 
-import { createContext, ReactNode } from "react";
+import { createContext, ReactNode, useState } from "react";
 import { setCookie } from "nookies";
 import Router from "next/router";
 
@@ -30,7 +30,7 @@ type User = {
 export const AuthContext = createContext({} as AuthContextType)
 
 export function AuthProvider({ children }: { children: ReactNode }) {
-    var IsAuthenticated = false;
+    const [IsAuthenticated, setIsAuthenticated] = useState(false);
 
     async function loginUsuarioRequest(SignInRequestData: SignInRequestData) {
 
@@ -72,7 +72,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             })
 
             // localStorage.setItem('AuthToken', token);
-            IsAuthenticated = true
+            setIsAuthenticated(true);
             return true;
         }
 
