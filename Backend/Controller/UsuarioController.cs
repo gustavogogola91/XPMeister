@@ -1,7 +1,7 @@
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
-using Backend.Models;
+using Backend.Model;
 using Backend.Model.DTOs;
 using Backend.Services;
 using AutoMapper;
@@ -37,7 +37,6 @@ namespace Backend.Controller
 
             try
             {
-
                 usuario.Senha = _hasher.HashUserPassword(usuario.Senha!);
                 _appDbContext.tb_usuario.Add(usuario);
                 await _appDbContext.SaveChangesAsync();
@@ -62,7 +61,7 @@ namespace Backend.Controller
 
                     var token = _jwtService.GenerateToken(usuarioJwtDTO);
 
-                    return Ok(new { token = token});
+                    return Ok(new { token = token });
                 }
                 return Unauthorized();
             }
@@ -77,7 +76,7 @@ namespace Backend.Controller
         {
             try
             {
-                var usuarios = await _appDbContext.tb_usuario.ToListAsync();
+                var usuarios = await _appDbContext.tb_usuario.Include(u => u.estudo).ToListAsync();
                 if (usuarios == null || !usuarios.Any())
                 {
                     return NotFound("Sem usuários no sistema");
@@ -131,23 +130,46 @@ namespace Backend.Controller
         }
 
         [HttpPut("{id}")]
-        public async Task<IActionResult> UpdateUsuario(int id, [FromBody] Usuario usuario)
+        public async Task<IActionResult> UpdateUsuario(int id, [FromBody] UsuarioPutDTO usuario)
         {
             try
             {
                 var usuarioExistente = await _appDbContext.tb_usuario.FindAsync(id);
 
-                if (usuarioExistente == null)
+                if (usuarioExistente != null)
                 {
-                    return NotFound("Usuario não encontrado");
+
+                    if (usuario.Nome != null)
+                    {
+                        usuarioExistente.Nome = usuario.Nome;
+                    }
+                    if (usuario.Email != null)
+                    {
+                        if (_hasher.CheckPassword(usuario.Senha!, usuarioExistente.Senha!))
+                        {
+                            usuarioExistente.Email = usuario.Email;
+                        }
+                        else { return Unauthorized(); }
+                    }
+                    if (usuario.Senha != null)
+                    {
+                        if (_hasher.CheckPassword(usuario.Senha!, usuarioExistente.Senha!))
+                        {
+                            usuarioExistente.Senha = _hasher.HashUserPassword(usuario.Senha);
+                        }
+                        else { return Unauthorized(); }
+
+                    }
+                    if (usuario.estudo != null)
+                    {
+                        usuarioExistente.estudo = usuario.estudo;
+                    }
+
+                    _appDbContext.tb_usuario.Update(usuarioExistente);
+                    await _appDbContext.SaveChangesAsync();
+                    return Ok("Informações atualizadas!");
                 }
-
-                usuarioExistente.Nome = usuario.Nome;
-                usuarioExistente.Email = usuario.Email;
-                usuarioExistente.Senha = usuario.Senha;
-
-                await _appDbContext.SaveChangesAsync();
-                return Ok("Informações atualizadas!");
+                return NotFound("Usuario não encontrado");
             }
             catch (Exception ex)
             {
