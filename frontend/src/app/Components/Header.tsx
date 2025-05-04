@@ -14,7 +14,7 @@ const DefaultHeader = () => {
                 <div className="flex flex-row text-[18px] gap-10">
                     <a href="*" className="font-semibold">Sobre</a>
                     <a href="*" className="font-semibold">Contato</a>
-                    <a href="/pages/LoginPage" className="font-semibold">Entrar</a>
+                    <a href="/Pages/LoginPage" className="font-semibold">Entrar</a>
                 </div>
             </div>
         </>
@@ -50,8 +50,8 @@ const AuthenticatedHeader = () => {
 
 const Header = () => {
     const { IsAuthenticated } = useContext(AuthContext);
-  
+
     return IsAuthenticated ? <AuthenticatedHeader /> : <DefaultHeader />;
-  };
-  
-  export default Header;
+};
+
+export default Header;
