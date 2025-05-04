@@ -112,8 +112,8 @@
     flex-direction: column;
     justify-content: space-evenly;
     align-items: center;
-    width: 380px;
-    height: 280px;
+    width: 300px;
+    height: 200px;
     border-radius: 4px;
     font-weight: 20px;
     background-color: var(--color-gray-alpha);
@@ -161,6 +161,20 @@
     align-items: center;
     justify-content: space-evenly;
     gap: 8px;
+  }
+
+  .menu-item{
+    font-size: 20px;
+    text-align: center;
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+  }
+
+  .menu-item.selected{
+    background-color: var(--color-gray-alpha);
+    border-left-width: 4px;
+    border-left-color: var(--color-purple);
   }
 
 }
