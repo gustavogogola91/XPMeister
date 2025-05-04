@@ -13,6 +13,8 @@ namespace Backend.Data
 
         public DbSet<Modulo> tb_modulo { get; set; }
 
+        public DbSet<Desafio> tb_desafios { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
 
