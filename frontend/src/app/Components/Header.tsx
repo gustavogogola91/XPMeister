@@ -1,6 +1,4 @@
 "use client"
-
-import { parseCookies } from "nookies";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 
@@ -14,7 +12,7 @@ const DefaultHeader = () => {
                 <div className="flex flex-row text-[18px] gap-10">
                     <a href="*" className="font-semibold">Sobre</a>
                     <a href="*" className="font-semibold">Contato</a>
-                    <a href="/pages/LoginPage" className="font-semibold">Entrar</a>
+                    <a href="/Pages/LoginPage" className="font-semibold">Entrar</a>
                 </div>
             </div>
         </>

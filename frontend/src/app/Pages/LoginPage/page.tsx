@@ -29,7 +29,7 @@ function FormLogin() {
         if (typeof window !== 'undefined') {
 
             if (AuthToken) {
-                router.push('/pages/AulasPage');
+                router.push('/Pages/AulasPage');
             }
         }
     }, [router]);
@@ -60,7 +60,7 @@ function FormLogin() {
         if (success) {
             console.log(localStorage.getItem('AuthToken'));
 
-            router.push('/pages/AulasPage');
+            router.push('/Pages/AulasPage');
         } else {
             alert("Email ou senha inválidos!");
         }
