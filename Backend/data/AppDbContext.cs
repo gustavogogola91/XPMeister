@@ -1,6 +1,6 @@
 using Microsoft.EntityFrameworkCore;
-using Backend.Models;
 using Backend.Model;
+using Backend.Models;
 
 namespace Backend.Data
 {
@@ -13,6 +13,8 @@ namespace Backend.Data
         public DbSet<Aula> tb_aula { get; set; }
 
         public DbSet<Modulo> tb_modulo { get; set; }
+
+        public DbSet<Desafio> tb_desafios { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

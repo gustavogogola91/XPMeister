@@ -1,24 +1,15 @@
-import LandingPage from "./Pages/LandingPage";
-import LoginPage from "./Pages/LoginPage";
-import RegisterPage from "./Pages/RegisterPage";
-import Header from "./Components/Header";
-import AulasPage from "./Pages/AulasPage";
-import DesafiosPage from "./Pages/DesafiosPage";
-import './globals.css'; 
-
+import './globals.css';
+import AulasPage from './Pages/AulasPage/page';
+import LandingPage from './Pages/LandingPage/page';
+import RegisterPage from './Pages/RegisterPage/page';
 
 export default function Home() {
   return (
-    <html>
-
-      <body>
-        <Header />
-        {/* <RegisterPage /> */}
-        {/* <LoginPage /> */}
-        <LandingPage />
-        {/*<DesafiosPage /> */}
-        {/*<AulasPage /> */}
-      </body>
-    </html>
+    <>
+      {/* <LoginPage /> */}
+      {/* <RegisterPage /> */}
+      <LandingPage />
+      {/* <AulasPage /> */}
+    </>
   );
 }

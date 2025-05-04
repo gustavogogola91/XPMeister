@@ -1,3 +1,6 @@
+"use client"
+import { useContext, useEffect, useState } from "react";
+import { AuthContext } from "../contexts/AuthContext";
 
 const DefaultHeader = () => {
 
@@ -9,7 +12,7 @@ const DefaultHeader = () => {
                 <div className="flex flex-row text-[18px] gap-10">
                     <a href="*" className="font-semibold">Sobre</a>
                     <a href="*" className="font-semibold">Contato</a>
-                    <a href="*" className="font-semibold">Entrar</a>
+                    <a href="/Pages/LoginPage" className="font-semibold">Entrar</a>
                 </div>
             </div>
         </>
@@ -30,30 +33,23 @@ const AuthenticatedHeader = () => {
                             <a href="*" className="font-semibold">Sobre</a>
                             <a href="*" className="font-semibold">Contato</a>
                             <a href="*" className="font-semibold bg-white p-[2px] rounded-full">
-                                <img src="/UserIcon.png" alt="UserIcon" 
-                                className="min-w-[30px] min-h[30px] max-w-[40px] max-h-[40px]"/>
+                                <img src="/UserIcon.png" alt="UserIcon"
+                                    className="min-w-[30px] min-h[30px] max-w-[40px] max-h-[40px]" />
                             </a>
+
                         </div>
 
                     </div>
-                    </>
-
-                //TODO Implementar header logado
-            }
                 </>
+            }
+        </>
     )
 }
 
 const Header = () => {
-    //FIXME: implementar check de login
-    // const isLoggedIn = !!localStorage.getItem('authToken'); // Verifica se há token
-
-    // // Retorna um header totalmente diferente baseado no login
-    // return isLoggedIn ? <AuthenticatedHeader /> : <DefaultHeader />;
-    // return <DefaultHeader />
-    return <AuthenticatedHeader />
-};
-
-
-
-            export default Header;
+    const { IsAuthenticated } = useContext(AuthContext);
+  
+    return IsAuthenticated ? <AuthenticatedHeader /> : <DefaultHeader />;
+  };
+  
+  export default Header;
