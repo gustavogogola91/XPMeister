@@ -15,7 +15,7 @@ const AulasPage = () => {
         if (typeof window !== 'undefined') {
             
             if (!AuthToken) {
-                router.push('/pages/LoginPage');
+                router.push('/Pages/LoginPage');
             }
         }
     }, [router]);
