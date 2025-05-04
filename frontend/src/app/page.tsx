@@ -2,8 +2,9 @@ import LandingPage from "./Pages/LandingPage";
 import LoginPage from "./Pages/LoginPage";
 import RegisterPage from "./Pages/RegisterPage";
 import Header from "./Components/Header";
-import './globals.css'; 
 import AulasPage from "./Pages/AulasPage";
+import DesafiosPage from "./Pages/DesafiosPage";
+import './globals.css'; 
 
 
 export default function Home() {
@@ -15,7 +16,8 @@ export default function Home() {
         {/* <RegisterPage /> */}
         {/* <LoginPage /> */}
         <LandingPage />
-        {/* <AulasPage /> */}
+        {/*<DesafiosPage /> */}
+        {/*<AulasPage /> */}
       </body>
     </html>
   );
