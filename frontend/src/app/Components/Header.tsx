@@ -48,8 +48,8 @@ const AuthenticatedHeader = () => {
 
 const Header = () => {
     const { IsAuthenticated } = useContext(AuthContext);
-  
+
     return IsAuthenticated ? <AuthenticatedHeader /> : <DefaultHeader />;
-  };
-  
-  export default Header;
+};
+
+export default Header;

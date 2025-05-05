@@ -14,6 +14,8 @@
   --color-purple: #AF52DE;
   --color-purple-alpha: rgba(175, 82, 222, 0.22);
   --color-gray-alpha: rgba(217, 217, 217, 0.24);
+  --color-black-gray-alpha: rgba(30, 30, 30, 0.20);
+  --color-blacker-gray-alpha: rgba(30, 30, 30, 0.71);
   --font-inter: var(--font-family-inter);
   --radius-default: 4px; 
   --text-logo: 64px;
@@ -104,6 +106,77 @@
       transform: translateY(-2px);
     }
   }
+
+  .module-card{
+    display: flex;
+    flex-direction: column;
+    justify-content: space-evenly;
+    align-items: center;
+    width: 300px;
+    height: 200px;
+    border-radius: 4px;
+    font-weight: 20px;
+    background-color: var(--color-gray-alpha);
+  }
+
+  .module-card h2{
+    color: var(--color-purple);
+    text-align: center;
+    width: 70%;
+    font-weight: bold;
+    font-size: 26px;
+  }
+
+  .module-card-status{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    width: 230px;
+    height: 45px;
+    font-size: 20px;
+    border-radius: 10px;
+    background-color: var(--color-purple);
+    font-weight: 900;
+    color: #ffffff;
+  }
+
+  .module-card-status.undone{
+    background-color: var(--color-purple);
+    color: #ffffff;
+  }
+  
+  .module-card-status.completed{
+    background-color: var(--color-purple-alpha);
+    color: var(--color-purple);
+  }
+
+  .module-card-status.blocked{
+    background-color: var(--color-black-gray-alpha);
+    color: var(--color-blacker-gray-alpha);
+  }
+
+  .module-card-icon{
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-content: space-evenly;
+    gap: 8px;
+  }
+
+  .menu-item{
+    font-size: 20px;
+    text-align: center;
+    margin: 5px;
+    padding: 5px;
+    cursor: pointer;
+  }
+
+  .menu-item.selected{
+    background-color: var(--color-gray-alpha);
+    border-left-width: 4px;
+    border-left-color: var(--color-purple);
+  }
+
 }
 
  body {
