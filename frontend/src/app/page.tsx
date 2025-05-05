@@ -8,8 +8,9 @@ export default function Home() {
     <>
       {/* <LoginPage /> */}
       {/* <RegisterPage /> */}
-      <LandingPage />
+      {/* <LandingPage /> */}
       {/* <AulasPage /> */}
+      <ModulosPage />
     </>
   );
 }
