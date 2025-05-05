@@ -1,6 +1,4 @@
 "use client"
-
-import { parseCookies } from "nookies";
 import { useContext, useEffect, useState } from "react";
 import { AuthContext } from "../contexts/AuthContext";
 

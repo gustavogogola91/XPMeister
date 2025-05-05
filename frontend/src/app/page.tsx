@@ -1,16 +1,12 @@
-
-import LandingPage from "./Pages/LandingPage/page";
-import LoginPage from "./Pages/LoginPage/page";
-import ModulosPage from "./Pages/ModulosPage/page";
-import RegisterPage from "./Pages/RegisterPage/page";
 import './globals.css';
-
-
+import AulasPage from './Pages/AulasPage/page';
+import LandingPage from './Pages/LandingPage/page';
+import RegisterPage from './Pages/RegisterPage/page';
 
 export default function Home() {
   return (
     <>
-      {/* < LoginPage /> */}
+      {/* <LoginPage /> */}
       {/* <RegisterPage /> */}
       {/* <LandingPage /> */}
       {/* <AulasPage /> */}
