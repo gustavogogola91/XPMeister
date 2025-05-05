@@ -1,14 +1,14 @@
 "use client"
 
-import { createContext, ReactNode, useState } from "react";
-import { setCookie } from "nookies";
-import Router from "next/router";
+import { createContext, ReactNode, useEffect, useState } from "react";
+import { destroyCookie, parseCookies, setCookie } from "nookies";
 
 const apiUrl = "http://localhost:5017"
 
 type AuthContextType = {
     IsAuthenticated: boolean;
     loginUsuario: (data: SignInData) => Promise<boolean>
+    logoutUsuario: () => Promise<void>
 }
 
 type SignInRequestData = {
@@ -32,8 +32,15 @@ export const AuthContext = createContext({} as AuthContextType)
 export function AuthProvider({ children }: { children: ReactNode }) {
     const [IsAuthenticated, setIsAuthenticated] = useState(false);
 
+    useEffect(() => {
+        const { 'auth-token': token } = parseCookies();
+        if (token) {
+            setIsAuthenticated(true);
+        }
+    }, []);
+    
     async function loginUsuarioRequest(SignInRequestData: SignInRequestData) {
-
+        
         try {
             const response = await fetch(`${apiUrl}/usuario/login`, {
                 method: "POST",
@@ -81,8 +88,13 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         // setUser(username);
     }
 
+    async function logoutUsuario() {
+        destroyCookie(null, 'auth-token');
+        setIsAuthenticated(false);
+    }
+
     return (
-        <AuthContext.Provider value={{ IsAuthenticated, loginUsuario }}>
+        <AuthContext.Provider value={{ IsAuthenticated, loginUsuario, logoutUsuario }}>
             {children}
         </AuthContext.Provider>
     )
