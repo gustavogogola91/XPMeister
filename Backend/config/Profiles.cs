@@ -8,6 +8,8 @@ namespace Backend.config
         public Profiles()
         {
             CreateMap<Usuario, UsuarioJwtDTO>();
+            CreateMap<Desafio, DesafioDTO>();
+            CreateMap<DesafioPostDTO, Desafio>();
         }
     }
 }

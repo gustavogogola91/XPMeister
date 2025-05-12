@@ -4,16 +4,14 @@ namespace Backend.Model
 {
     public class DesafioDTO
     {
-        [Required]
+        public int Id { get; private set; }
         public string? Titulo { get; set; }
-        [Required]
         public string? Descricao { get; set; }
-        [Required]
         public Dificuldade NivelDificuldade { get; set; }
-        [Required]
-        public DateTime DataEntrega { get; set; }
+        public DateTime DataCriacao { get; set; }
         public double PontuacaoMaxima { get; set; }
-        [Required]
-        public int UsuarioId { get; set; }
+        public Usuario? Usuario { get; set; } //TODO : Criar DTO usuario
+        public Modulo? Modulo { get; set; } //TODO : Criar DTO modulo
+        public bool Ativo { get; set; }
     }
 }
