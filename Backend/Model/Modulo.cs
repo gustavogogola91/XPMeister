@@ -16,8 +16,7 @@ namespace Backend.Model
         [Required(ErrorMessage = "Descrição é obrigatório")]
         public string? Descricao { get; set; }
 
-        //TODO: Retirar o comentario das linhas abaixo no momento em que os objs relacionados estejam criados
-        // public ICollection<Aulas> Aulas { get; set; }
-        // public ICollection<Desafios> Desafios { get; set; }
+        public ICollection<Aula>? Aulas { get; set; }
+        public ICollection<Desafio>? Desafios { get; set; }
     }
 }

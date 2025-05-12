@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.Model;
-using Backend.Model.DTOs;
 using Backend.Services;
 using AutoMapper;
 

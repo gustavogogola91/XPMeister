@@ -1,14 +1,13 @@
 using System.ComponentModel.DataAnnotations;
-using Backend.Model;
 
-namespace Backend.Models
+namespace Backend.Model
 {
     public class DesafioDTO
     {
         [Required]
-        public string Titulo { get; set; }
+        public string? Titulo { get; set; }
         [Required]
-        public string Descricao { get; set; }
+        public string? Descricao { get; set; }
         [Required]
         public Dificuldade NivelDificuldade { get; set; }
         [Required]

@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
-using Backend.Model;
 
-namespace Backend.Models
+namespace Backend.Model
 {
     public class Desafio
     {
