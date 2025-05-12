@@ -11,7 +11,8 @@ namespace Backend.Model
         [Required(ErrorMessage = "IdModulo é obrigatório")]
         public int IdModulo { get; set; }
         [Required(ErrorMessage = "Número da Sequência é obrigatório")]
-        public int NumeroSequencia { get; set; } 
+        public Modulo? Modulo { get; set; }
+        public int NumeroSequencia { get; set; }
         [Required(ErrorMessage = "Nome é obrigatório")]
         public string? Nome { get; set; }
         [Required(ErrorMessage = "Descrição é obrigatório")]

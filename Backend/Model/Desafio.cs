@@ -18,6 +18,7 @@ namespace Backend.Model
         public DateTime DataCriacao { get; private set; }
         public double PontuacaoMaxima { get; set; }
         [Required(ErrorMessage = "O campo é obrigatório.")]
+        //TODO: criar conexão com Modulo
         public int UsuarioId {get; set;}
         public Usuario Usuario {get; set;}
         public bool Ativo { get; set; }
