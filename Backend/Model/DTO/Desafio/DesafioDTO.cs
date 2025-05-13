@@ -8,7 +8,7 @@ namespace Backend.Model
         public Dificuldade NivelDificuldade { get; set; }
         public DateTime DataCriacao { get; set; }
         public double PontuacaoMaxima { get; set; }
-        public Usuario? Usuario { get; set; } //TODO : Criar DTO usuario
+        public UsuarioDTO? Usuario { get; set; }
         public Modulo? Modulo { get; set; } //TODO : Criar DTO modulo
         public bool Ativo { get; set; }
     }

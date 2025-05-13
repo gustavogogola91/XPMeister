@@ -15,6 +15,8 @@ namespace Backend.config
             CreateMap<AulaPostDTO, Aula>();
 
             CreateMap<Usuario, UsuarioJwtDTO>();
+            CreateMap<Usuario, UsuarioDTO>();
+            CreateMap<UsuarioPostDTO, Usuario>();
         }
     }
 }
