@@ -1,5 +1,3 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Backend.Model
 {
     public class DesafioDTO

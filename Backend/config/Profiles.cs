@@ -7,9 +7,14 @@ namespace Backend.config
     {
         public Profiles()
         {
-            CreateMap<Usuario, UsuarioJwtDTO>();
             CreateMap<Desafio, DesafioDTO>();
             CreateMap<DesafioPostDTO, Desafio>();
+
+            CreateMap<Aula, AulaCompletaDTO>();
+            CreateMap<Aula, AulaResumidaDTO>();
+            CreateMap<AulaPostDTO, Aula>();
+
+            CreateMap<Usuario, UsuarioJwtDTO>();
         }
     }
 }
