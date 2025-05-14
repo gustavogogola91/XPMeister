@@ -1,4 +1,10 @@
+"use client"
+
+import { useRouter } from 'next/navigation';
+
 export default function LandingPage(){
+    const router = useRouter();
+
 
     return(
         <div className="flex flex-col gap-10 items-center mb-20">
@@ -32,7 +38,7 @@ export default function LandingPage(){
                     <p>Nenhum custo inicial</p>
                 </div>
             </div>
-            <button className="btn-primary w-64 md:w-96 h-[80px] md:h-[90px]">Começar Agora</button>
+            <button onClick={() => router.push('/Pages/LoginPage')}  className="btn-primary w-64 md:w-96 h-[80px] md:h-[90px]">Começar Agora</button>
         </div>
     )
 

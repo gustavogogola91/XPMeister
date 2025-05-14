@@ -32,6 +32,7 @@ const AuthenticatedHeader = () => {
                         <div className="flex items-center text-white flex-row md:text-[18px] gap-4 md:gap-10">
                             <a href="*" className="font-semibold">Sobre</a>
                             <a href="*" className="font-semibold">Contato</a>
+
                             <button className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
                                 {isOpen ? <h2 className="w-8 font-bold">X</h2>: <img src="/MenuIcon.png" className="w-8" alt="MenuIcon" />}
                             </button>
@@ -60,8 +61,8 @@ const AuthenticatedHeader = () => {
 
 const Header = () => {
     const { IsAuthenticated } = useContext(AuthContext);
-  
+
     return IsAuthenticated ? <AuthenticatedHeader /> : <DefaultHeader />;
-  };
-  
-  export default Header;
+};
+
+export default Header;
