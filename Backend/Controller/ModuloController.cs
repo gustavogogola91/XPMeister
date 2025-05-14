@@ -46,7 +46,7 @@ namespace Backend.Controller
         {
             try
             {
-                var modulo = await _database.tb_modulo.FirstOrDefaultAsync(m => m.Id == id);
+                var modulo = await _database.tb_modulo.Include(m => m.Desafios).Include(m => m.Aulas).FirstOrDefaultAsync(m => m.Id == id);
 
                 if (modulo == null)
                 {
