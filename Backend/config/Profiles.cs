@@ -8,6 +8,7 @@ namespace Backend.config
         public Profiles()
         {
             CreateMap<Desafio, DesafioDTO>();
+            CreateMap<Desafio, DesafioResumidoDTO>();
             CreateMap<DesafioPostDTO, Desafio>();
 
             CreateMap<Aula, AulaCompletaDTO>();

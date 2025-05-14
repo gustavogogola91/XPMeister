@@ -2,7 +2,6 @@ using Microsoft.EntityFrameworkCore;
 
 namespace Backend.Model
 {
-    [Owned]
     public class TempoDeEstudo
     {
         public int Id { get; set; }

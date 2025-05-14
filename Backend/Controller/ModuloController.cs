@@ -24,7 +24,7 @@ namespace Backend.Controller
         {
             try
             {
-                var modulos = await _database.tb_modulo.ToListAsync();
+                var modulos = await _database.tb_modulo.Include(m => m.Desafios).Include(m => m.Aulas).ToListAsync();
 
                 if (modulos == null || !modulos.Any())
                 {

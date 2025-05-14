@@ -6,7 +6,7 @@ namespace Backend.Model
         public string? Titulo { get; set; }
         public Dificuldade Dificuldade { get; set; }
         public string? Descricao { get; set; }
-        public List<AulaResumidaDTO>? Aulas { get; set; }
-        public List<DesafioDTO>? Desafios { get; set; }
+        public ICollection<AulaResumidaDTO>? Aulas { get; set; }
+        public ICollection<DesafioResumidoDTO>? Desafios { get; set; }
     }
 }
