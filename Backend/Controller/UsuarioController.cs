@@ -78,7 +78,7 @@ namespace Backend.Controller
         {
             try
             {
-                var usuarios = await _appDbContext.tb_usuario.Include(u => u.Estudo).ToListAsync();
+                var usuarios = await _appDbContext.tb_usuario.ToListAsync();
                 if (usuarios == null || !usuarios.Any())
                 {
                     return NotFound("Sem usuários no sistema");
