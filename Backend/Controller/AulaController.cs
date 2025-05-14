@@ -85,7 +85,7 @@ namespace Backend.Controller
         {
             try
             {
-                var aulas = await _appDbContext.tb_aula.Include(a => a.Modulo).ToListAsync();
+                var aulas = await _appDbContext.tb_aula.Include(a => a.Modulo).ThenInclude(m => m.Desafios).ToListAsync();
                 if (aulas == null || !aulas.Any())
                 {
                     return NotFound("Sem aulas cadastradas!");

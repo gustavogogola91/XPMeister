@@ -46,7 +46,7 @@ namespace Backend.Controller
         public async Task<IActionResult> BuscarDesafios()
         {
             try {
-                var desafios = await _database.tb_desafios.Include(d => d.Modulo).Include(d => d.Usuario).ToListAsync();
+                var desafios = await _database.tb_desafios.Include(d => d.Modulo).ThenInclude(m => m.Aulas).Include(d => d.Usuario).ToListAsync();
                 
                 if(desafios == null || !desafios.Any()) {
                     return NotFound("Não existem desafios cadastrados");

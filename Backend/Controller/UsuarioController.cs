@@ -94,7 +94,7 @@ namespace Backend.Controller
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuariosId(int id)
+        public async Task<ActionResult<UsuarioDTO>> GetUsuariosId(int id)
         {
             try
             {
