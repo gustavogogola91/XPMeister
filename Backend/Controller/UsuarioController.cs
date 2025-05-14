@@ -42,7 +42,7 @@ namespace Backend.Controller
                 await _appDbContext.SaveChangesAsync();
 
                 var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
-                return Created("Usuario criado com sucesso", usuario);
+                return Created("Usuario criado com sucesso", usuarioDto);
             }
             catch (Exception ex)
             {

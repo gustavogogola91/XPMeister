@@ -1,16 +1,12 @@
-using System.ComponentModel.DataAnnotations;
-
 namespace Backend.Model
 {
-    public class Modulo
+    public class ModuloDTO
     {
-        [Key]
         public int Id { get; set; }
         public string? Titulo { get; set; }
         public Dificuldade Dificuldade { get; set; }
         public string? Descricao { get; set; }
-
-        public ICollection<Aula>? Aulas { get; set; }
-        public ICollection<Desafio>? Desafios { get; set; }
+        public List<AulaResumidaDTO>? Aulas { get; set; }
+        public List<DesafioDTO>? Desafios { get; set; }
     }
 }

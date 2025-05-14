@@ -17,6 +17,9 @@ namespace Backend.config
             CreateMap<Usuario, UsuarioJwtDTO>();
             CreateMap<Usuario, UsuarioDTO>();
             CreateMap<UsuarioPostDTO, Usuario>();
+
+            CreateMap<Modulo, ModuloDTO>();
+            CreateMap<ModuloPostDTO, Modulo>();
         }
     }
 }
