@@ -40,6 +40,8 @@ const ModulosPage = () => {
     }, [router]);
 
     useEffect(() => {
+
+
         const fetchCards = async () => {
             setLoading(true);
             setError(null);
@@ -53,6 +55,7 @@ const ModulosPage = () => {
                 });
 
                 if (!response.ok) {
+                    router.push("LoginPage");
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 

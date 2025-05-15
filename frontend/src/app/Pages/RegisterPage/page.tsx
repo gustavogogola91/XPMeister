@@ -1,10 +1,27 @@
 "use client";
 
-import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { parseCookies } from "nookies";
+import { useEffect, useState } from "react";
 
 var apiUrl = "http://localhost:5017"
 
 export default function RegisterPage() {
+    //  const router = useRouter();
+    
+    //     const { 'auth-token': AuthToken } = parseCookies();
+    
+    //     useEffect(() => {
+    //         if (typeof window !== 'undefined') {
+    
+    //             if (AuthToken) {
+    //                 router.push('/Pages/AulasPage');
+    //             }
+    //         }
+    //     }, [router]);
+
+
+
     return (
       <div className="flex flex-col gap-10 items-center mb-20">
         <div className="flex flex-col items-center justify-center flex-1 p-6">
@@ -18,6 +35,7 @@ export default function RegisterPage() {
   }
 
   async function postUsuario(nome: string, email: string, senha: string) {
+    
     try {
         const response = await fetch(`${apiUrl}/usuario`, {
             method: "POST",
@@ -32,6 +50,7 @@ export default function RegisterPage() {
         }
         else {
             console.log("Usuário cadastrado");
+            
         }
     }
     catch (error) {
@@ -79,6 +98,7 @@ export default function RegisterPage() {
     };
 
     const handleSubmit = async (e: React.FormEvent) => {
+        
         e.preventDefault();
 
         if (registerData.senha !== registerData.confirmarSenha) {

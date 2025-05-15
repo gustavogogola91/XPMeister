@@ -48,14 +48,29 @@ builder.Services.AddAuthentication(opt =>
         ValidateLifetime = true,
         ValidateIssuerSigningKey = true,
         ValidIssuer = builder.Configuration["Jwt:Issuer"],
-        IssuerSigningKey = new SymmetricSecurityKey(Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+        IssuerSigningKey = new SymmetricSecurityKey(
+            Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]!))
+    };
+
+    opt.Events = new JwtBearerEvents
+    {
+        OnAuthenticationFailed = context =>
+        {
+            Console.WriteLine($"Autenticação falhou: {context.Exception}");
+            return Task.CompletedTask;
+        },
+        OnTokenValidated = context =>
+        {
+            Console.WriteLine($"Autenticação feita com sucesso");
+            return Task.CompletedTask;
+        }
     };
 });
 
-builder.Services.AddAuthorization(opt =>
-{
-    opt.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
-});
+// builder.Services.AddAuthorization(opt =>
+// {
+//     opt.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+// });
 
 
 var app = builder.Build();

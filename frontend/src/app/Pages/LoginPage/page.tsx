@@ -78,8 +78,8 @@ function FormLogin() {
     return (
         <>
             <form className="base-form flex flex-col w-full max-w-xs gap-4" onSubmit={handleSubmit}>
-                <input name="email" type="email" placeholder="Email" className="" value={loginData.email} onChange={handleChange} required />
-                <input name="senha" type="password" placeholder="Senha" className="" value={loginData.senha} onChange={handleChange} required />
+                <input name="email" type="email" placeholder="Email" className="focus:border-purple focus:outline-0" value={loginData.email} onChange={handleChange} required />
+                <input name="senha" type="password" placeholder="Senha" className="focus:border-purple focus:outline-0" value={loginData.senha} onChange={handleChange} required />
                 <button type="submit" className="btn-primary py-2 text-[16px] font-bold"> Entrar </button>
             </form>
         </>
