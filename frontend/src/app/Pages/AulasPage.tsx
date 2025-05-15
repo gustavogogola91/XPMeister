@@ -70,12 +70,118 @@ O XP é ideal para ambientes dinâmicos e equipes coesas, mas exige comprometime
   { 
     title: 'Desenvolvimento', 
     videoId: 'X1ksx_pVpVQ',
-    content: `Conteúdo desenvolvimento...`
+    content: `1. Introdução ao XP (eXtreme Programming)
+Metodologia ágil focada em qualidade, flexibilidade e colaboração.
+Objetivo: Entregar software funcional de forma iterativa e adaptativa.
+
+2. Papéis no XP
+Cliente: Define requisitos e prioridades (Histórias de Usuário).
+Programadores: Desenvolvem o código em pares (Programação em Pares).
+Testadores: Garantem a qualidade através de testes.
+Coach: Facilita a adoção das práticas do XP.
+
+3. Ciclo de Vida do XP
+Planejamento:
+Definição de Histórias de Usuário (requisitos em linguagem simples).
+Jogo de Planejamento: Priorização colaborativa de tarefas.
+Projeto:
+Foco em simplicidade (KISS - Keep It Simple, Stupid).
+Codificação:
+Programação em Pares (dois desenvolvedores trabalhando juntos).
+Desenvolvimento Dirigido a Testes (TDD): Criar testes antes do código.
+Testes:
+Testes Unitários: Validar componentes individuais.
+Testes de Integração: Garantir funcionamento entre módulos.
+Testes de Aceitação: Aprovação final pelo cliente.
+
+4. Valores do XP
+Comunicação: Transparência entre equipe e cliente.
+Simplicidade: Evitar complexidade desnecessária.
+Feedback Contínuo: Ajustes rápidos baseados em resultados.
+Coragem: Para refatorar e adaptar o código.
+Respeito: Colaboração e valorização de todos os papéis.
+
+5. Princípios Básicos
+Entrega frequente de versões funcionais.
+Adaptação a mudanças de requisitos.
+Refatoração constante para melhorar o código.
+
+6. Práticas do XP
+Test-Driven Development (TDD): Desenvolver com base em testes pré-definidos.
+Integração Contínua: Mesclar código diariamente para evitar conflitos.
+Metáfora do Sistema: Linguagem comum para descrever o projeto.
+Cliente no Time: Participação ativa do cliente no processo.
+
+7. Regras do XP
+Planejamento:
+Estimativas realistas e priorização colaborativa.
+Gerenciamento:
+Ritmo sustentável (sem horas extras excessivas).
+Projeto:
+Foco em design incremental e emergente.
+Codificação:
+Padrões de codificação compartilhados.
+Testes:
+Automação de testes em todas as etapas.
+
+8. Vantagens do XP
+Redução de riscos com entregas frequentes.
+Código mais limpo e mantível (graças à refatoração e TDD).
+Alta adaptabilidade a mudanças.
+Melhoria na colaboração entre equipe e cliente.
+
+9. Desvantagens do XP
+Dependência da participação ativa do cliente.
+Desafio em escalar para projetos muito grandes.
+Requer disciplina e experiência da equipe.`
   },
   { 
     title: 'Conclusão', 
     videoId: 'H30oAN1QsPA',
-    content: `Conteúdo conclusão...`
+    content: `1. Introdução
+Scrum:
+Framework de organização de trabalho.
+Utiliza backlog e sprints (ciclos de 1 a 4 semanas).
+
+XP:
+Metodologia focada em práticas técnicas como testes, revisão e integração contínua.
+Prioriza soluções simples e eficientes.
+
+2. Qual dos 2 é melhor?
+Depende do contexto:
+Scrum é mais alinhado com gestão de processos e pode ser aplicado em equipes multidisciplinares.
+XP é focado em desenvolvimento de software, com ênfase em qualidade técnica.
+
+Uso combinado:
+É possível usar Scrum para gestão do projeto e XP para práticas de codificação.
+
+3. Recapitulando as diferenças
+Scrum	XP
+Organiza trabalho em sprints.	Foco em práticas técnicas contínuas.
+Backlog priorizado pelo Product Owner.	Desenvolve soluções simples (KISS).
+Ideal para equipes multidisciplinares.	Voltado para times de desenvolvimento.
+
+4. Boas práticas para escolher
+Use Scrum se:
+Precisa de estrutura clara para gerenciar prazos e prioridades.
+Trabalha com equipes diversas (não apenas desenvolvedores).
+
+Use XP se:
+Quer melhorar qualidade técnica (ex: testes automatizados, programação em pares).
+Busca flexibilidade para mudanças rápidas no código.
+Combine ambos se:
+Deseja alinhar gestão de processos (Scrum) com excelência técnica (XP).
+
+5. Qual é melhor?
+Não há resposta universal:
+Scrum é melhor para gestão ágil de projetos.
+XP é melhor para desenvolvimento técnico eficiente.
+
+Dica final:
+Avalie as necessidades da equipe:
+Se o problema é organização, escolha Scrum.
+Se o desafio é qualidade do código, opte por XP.
+Combinação dos dois pode ser a solução ideal para times de software.`
   }
 ];
 
