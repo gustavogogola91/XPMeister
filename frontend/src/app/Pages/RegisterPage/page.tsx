@@ -28,10 +28,10 @@ export default function RegisterPage() {
         });
 
         if (!response.ok) {
-            console.log("Erro ao cadastrar usuário, problema de algum fudido que fez tua API!");
+            console.log("Erro ao cadastrar usuário");
         }
         else {
-            console.log("De alguma forma essa poha funcionou, parabéns Isaac por fazer o minimo!");
+            console.log("Usuário cadastrado");
         }
     }
     catch (error) {
@@ -50,7 +50,7 @@ export default function RegisterPage() {
         });
 
         if (!response.ok) {
-            console.log("Nenhum Usuário está usando esse email, Fé!");
+            console.log("Nenhum Usuário está usando esse email");
             return null;
         }
         else {
@@ -82,13 +82,13 @@ export default function RegisterPage() {
         e.preventDefault();
 
         if (registerData.senha !== registerData.confirmarSenha) {
-            alert("As senhas não coincidem seu símio burro!");
+            alert("As senhas não coincidem");  //TODO: colocar no input o erro
             return;
         }
     
         var usuario = await getUsuarios(registerData.email);
         if (usuario !== null) {
-            alert("Esse email já está cadastrado, seu símio burro!");
+            alert("Esse email já está cadastrado"); //TODO: colocar no input o erro
             return;
         }
         await postUsuario(registerData.nome, registerData.email, registerData.senha);
@@ -98,10 +98,10 @@ export default function RegisterPage() {
     return (
         <>
         <form className="base-form flex flex-col w-full max-w-xs gap-4" onSubmit={handleSubmit}>
-            <input name="nome" type="text" placeholder="Nome Completo" className="" value={registerData.nome} onChange={handleChange} required/>
-            <input name="email" type="email" placeholder="Email" className="" value={registerData.email} onChange={handleChange} required/>
-            <input name="senha" type="password" placeholder="Senha" className="" value={registerData.senha} onChange={handleChange} required/>
-            <input name="confirmarSenha" type="password" placeholder="Confirmar Senha" value={registerData.confirmarSenha} onChange={handleChange} className="" required/>
+            <input name="nome" type="text" minLength={4} maxLength={60} placeholder="Nome Completo" className="focus:border-purple focus:outline-0" value={registerData.nome} onChange={handleChange} required/>
+            <input name="email" type="email" minLength={8} maxLength={60} placeholder="Email" className="focus:border-purple focus:outline-0" value={registerData.email} onChange={handleChange} required/>
+            <input name="senha" type="password" minLength={8} maxLength={60} placeholder="Senha" className="focus:border-purple focus:outline-0" value={registerData.senha} onChange={handleChange} required/>
+            <input name="confirmarSenha" type="password" minLength={8} maxLength={60} placeholder="Confirmar Senha" value={registerData.confirmarSenha} onChange={handleChange} className="focus:border-purple focus:outline-0" required/>
             <button type="submit" className="btn-primary py-2 text-[16px] font-bold"> Criar Conta </button>
         </form>
         </>

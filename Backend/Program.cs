@@ -52,6 +52,12 @@ builder.Services.AddAuthentication(opt =>
     };
 });
 
+builder.Services.AddAuthorization(opt =>
+{
+    opt.AddPolicy("UserPolicy", policy => policy.RequireRole("User"));
+});
+
+
 var app = builder.Build();
 
 // Configure the HTTP request pipeline.

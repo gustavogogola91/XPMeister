@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { parseCookies } from "nookies";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const apiUrl = "http://localhost:5017"
 interface ModuleCard {
@@ -47,9 +47,9 @@ const ModulosPage = () => {
             try {
                 const response = await fetch(`${apiUrl}/modulo`, {
                     method: "GET",
-                    // headers: {
-                    //   'Authorization': 'Bearer YOUR_TOKEN',
-                    // },
+                    headers: {
+                      'Authorization': `Bearer ${AuthToken}`,
+                    },
                 });
 
                 if (!response.ok) {
