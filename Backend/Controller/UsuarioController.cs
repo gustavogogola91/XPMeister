@@ -5,6 +5,7 @@ using Backend.Model;
 using Backend.Model.DTOs;
 using Backend.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controller
 {
@@ -47,6 +48,14 @@ namespace Backend.Controller
                 return StatusCode(500, ex);
             }
         }
+
+        [HttpGet("token")]
+        [Authorize]
+        public ActionResult ValidateToken() //TODO Gambiarra
+        {
+            return Ok();
+        }
+
 
         [HttpPost("login")]
         public async Task<ActionResult> LoginUsuario([FromBody] LoginDTO model)
