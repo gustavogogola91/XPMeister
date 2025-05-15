@@ -51,10 +51,11 @@ namespace Backend.Controller
 
         [HttpGet("token")]
         [Authorize]
-        public ActionResult ValidateToken() //TODO Gambiarra
+        public IActionResult CheckTokenValidity()
         {
-            return Ok();
+            return Ok(new { valid = true });
         }
+
 
 
         [HttpPost("login")]
