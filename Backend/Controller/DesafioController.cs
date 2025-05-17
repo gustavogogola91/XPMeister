@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 namespace Backend.Controller
 {
     [ApiController]
-    [Route("desafio/")]
+    [Route("desafio")]
     public class DesafioController : ControllerBase
     {
         private readonly AppDbContext _database;
