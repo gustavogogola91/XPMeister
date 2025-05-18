@@ -1,5 +1,6 @@
+using AutoMapper;
 using Backend.Data;
-using Backend.Models;
+using Backend.Model;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 
@@ -10,34 +11,30 @@ namespace Backend.Controller
     public class DesafioController : ControllerBase
     {
         private readonly AppDbContext _database;
+        private readonly IMapper _mapper;
 
-        public DesafioController(AppDbContext database)
+        public DesafioController(AppDbContext database, IMapper mapper)
         {
             _database = database;
+            _mapper = mapper;
         }
 
        [HttpPost("criar-desafio")]
-        public async Task<IActionResult> CriarDesafio([FromBody] DesafioDTO dto) 
+        public async Task<IActionResult> CriarDesafio([FromBody] DesafioPostDTO dto) 
         {
             if (!ModelState.IsValid)
                 return BadRequest(ModelState);
 
             try
             {
-                var desafio = new Desafio
-                {
-                    Titulo = dto.Titulo,
-                    Descricao = dto.Descricao,
-                    NivelDificuldade = dto.NivelDificuldade,
-                    DataEntrega = dto.DataEntrega,
-                    PontuacaoMaxima = dto.PontuacaoMaxima,
-                    UsuarioId = dto.UsuarioId
-                };
+                var desafio = _mapper.Map<Desafio>(dto);
 
                 await _database.tb_desafios.AddAsync(desafio);
                 await _database.SaveChangesAsync();
 
-                return CreatedAtAction(nameof(CriarDesafio), new { id = desafio.Id }, desafio);
+                var desafioDto = _mapper.Map<DesafioDTO>(desafio);
+
+                return Created("Desafio criado com sucesso", desafioDto);
             }
             catch (Exception ex)
             {
@@ -49,8 +46,14 @@ namespace Backend.Controller
         public async Task<IActionResult> BuscarDesafios()
         {
             try {
-                var desafios = await _database.tb_desafios.ToListAsync();
-                return Ok(desafios);
+                var desafios = await _database.tb_desafios.Include(d => d.Modulo).ThenInclude(m => m.Aulas).Include(d => d.Usuario).ToListAsync();
+                
+                if(desafios == null || !desafios.Any()) {
+                    return NotFound("Não existem desafios cadastrados");
+                }
+
+                var desafiosDto = _mapper.Map<List<DesafioDTO>>(desafios);
+                return Ok(desafiosDto);
 
             } catch(Exception ex) {
                 return StatusCode(500, new { erro = "Erro ao buscar desafios no banco", detalhe = ex.Message });
@@ -66,12 +69,14 @@ namespace Backend.Controller
             }
 
             try {
-                var desafio = await _database.tb_desafios.FirstOrDefaultAsync(d => d.Id == id);
+                var desafio = await _database.tb_desafios.Include(d => d.Modulo).Include(d => d.Usuario).FirstOrDefaultAsync(d => d.Id == id);
                 if (desafio == null)
                 {
                     return NotFound($"Desafio com ID {id} não encontrado.");
                 }
-                return Ok(desafio);
+
+                var desafioDto = _mapper.Map<DesafioDTO>(desafio);
+                return Ok(desafioDto);
 
             } catch (Exception ex) {
                 return StatusCode(500, new { erro = "Erro ao buscar desafio no banco", detalhe = ex.Message });
@@ -79,7 +84,7 @@ namespace Backend.Controller
         }
 
         [HttpPut("alterar-desafio/{id}")]
-        public async Task<IActionResult> AlterarDesafio(int id, [FromBody] DesafioDTO dto)
+        public async Task<IActionResult> AlterarDesafio(int id, [FromBody] DesafioPutDTO dto)
         {
             if (id <= 0)
                 return BadRequest("ID inválido.");
@@ -96,23 +101,19 @@ namespace Backend.Controller
                 if (!usuarioExiste)
                     return BadRequest("Usuário informado não existe.");
 
-                desafioOld.Titulo           = dto.Titulo;
-                desafioOld.Descricao        = dto.Descricao;
+                desafioOld.Titulo           = dto.Titulo!;
+                desafioOld.Descricao        = dto.Descricao!;
                 desafioOld.NivelDificuldade = dto.NivelDificuldade;
-                desafioOld.DataEntrega      = dto.DataEntrega;
                 desafioOld.PontuacaoMaxima  = dto.PontuacaoMaxima;
                 desafioOld.UsuarioId        = dto.UsuarioId;
+                desafioOld.ModuloId         = dto.ModuloId;
 
+                _database.tb_desafios.Update(desafioOld);
                 await _database.SaveChangesAsync();
 
-                return Ok(new {
-                    desafioOld.Id,
-                    desafioOld.Titulo,
-                    desafioOld.Descricao,
-                    desafioOld.NivelDificuldade,
-                    desafioOld.DataEntrega,
-                    desafioOld.PontuacaoMaxima
-                });
+                var desafio = _mapper.Map<DesafioDTO>(desafioOld);
+
+                return Ok(desafio);
 
             } catch (Exception ex) {
                 return StatusCode(500, new { erro = "Erro ao alterar desafio", detalhe = ex.Message });
@@ -135,6 +136,7 @@ namespace Backend.Controller
                 }
 
                 desafio.Ativo = false;
+                _database.tb_desafios.Update(desafio);
                 await _database.SaveChangesAsync();
 
                 return Ok("Desafio desativado com sucesso!");

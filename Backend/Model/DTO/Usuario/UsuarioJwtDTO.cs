@@ -1,4 +1,4 @@
-namespace Backend.Model.DTOs
+namespace Backend.Model
 {
     public class UsuarioJwtDTO
     {
