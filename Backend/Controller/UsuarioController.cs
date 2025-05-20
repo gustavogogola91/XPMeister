@@ -198,5 +198,29 @@ namespace Backend.Controller
                 return StatusCode(500, ex);
             }
         }
+
+        [HttpPost("tempo")]
+        public async Task<ActionResult> TempoUsuario([FromBody] TempoDeEstudo tempoEstudo)
+        {
+            if (tempoEstudo == null)
+            {
+                return BadRequest("Informacoes faltando!");
+            }
+            try
+            {
+                var tempoEstudo_ = await _appDbContext.tb_tempoEstudo.AddAsync(tempoEstudo);
+                await _appDbContext.SaveChangesAsync(); 
+                if (tempoEstudo_ == null)
+                {
+                    return NotFound("Problema na inserção no DB!");
+                }
+                return Ok(tempoEstudo_);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+
+        }
     }
 }

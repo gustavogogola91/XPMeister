@@ -93,7 +93,7 @@ export default function AlunoConfigPage() {
           handleChangeCheckbox={handleChangeCheckbox}
           alterarSenha={alterarSenha}
           alterarEmail={alterarEmail}
-          alterarEstudo={alterarEstudo}
+          alterarEstudo={criarTempoEstudo}
         />
 
         <div
@@ -140,14 +140,13 @@ export default function AlunoConfigPage() {
     }
   }
 
-  async function alterarEstudo() {
+  async function criarTempoEstudo() {
     var horas = (document.getElementById("horas") as HTMLInputElement).value;
     try {
-      const response = await fetch(`${apiUrl}/usuario/1`, {
-        method: "PUT",
+      const response = await fetch(`${apiUrl}/usuario/tempo`, {
+        method: "POST",
         headers: { "Content-Type": "application/json" },
           body: JSON.stringify({
-            tempoDeEstudo: {
               segunda: diasSelecionados.segunda,
               terca: diasSelecionados.terca,
               quarta: diasSelecionados.quarta,
@@ -156,7 +155,6 @@ export default function AlunoConfigPage() {
               sabado: diasSelecionados.sabado,
               domingo: diasSelecionados.domingo,
               horasDiarias: horas
-            }
           }),
       });
 
