@@ -1,6 +1,6 @@
 namespace Backend.Model
 {
-    public class Post
+    public class Postagem
     {
         public int Id { get; set; }
         public string? Titulo { get; set; }

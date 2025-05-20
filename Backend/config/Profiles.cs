@@ -1,5 +1,6 @@
 using AutoMapper;
 using Backend.Model;
+using Backend.Model.DTO.Forum;
 
 namespace Backend.config
 {
@@ -17,10 +18,15 @@ namespace Backend.config
 
             CreateMap<Usuario, UsuarioJwtDTO>();
             CreateMap<Usuario, UsuarioDTO>();
+            CreateMap<Usuario, UsuarioComentarioDTO>();
             CreateMap<UsuarioPostDTO, Usuario>();
 
             CreateMap<Modulo, ModuloDTO>();
             CreateMap<ModuloPostDTO, Modulo>();
+
+            CreateMap<Comentario, ComentarioDTO>();
+
+            CreateMap<Postagem, PostagemDTO>();
         }
     }
 }
