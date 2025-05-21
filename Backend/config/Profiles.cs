@@ -25,8 +25,10 @@ namespace Backend.config
             CreateMap<ModuloPostDTO, Modulo>();
 
             CreateMap<Comentario, ComentarioDTO>();
+            CreateMap<ComentarioPostDTO, Comentario>();
 
             CreateMap<Postagem, PostagemDTO>();
+            CreateMap<PostagemPostDTO, Postagem>();
         }
     }
 }
