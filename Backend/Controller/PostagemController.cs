@@ -56,7 +56,7 @@ namespace Backend.Controller
 
                 var postagemDTO = _mapper.Map<PostagemDTO>(postagem);
 
-                return postagemDTO;
+                return Ok(postagemDTO);
             }
             catch (Exception ex)
             {
@@ -73,6 +73,14 @@ namespace Backend.Controller
             }
             try
             {
+
+                var usuario = await _database.tb_usuario.FirstOrDefaultAsync(u => u.Id == postDTO.AutorId);
+
+                if (usuario == null)
+                {
+                    return BadRequest($"Usuario id {postDTO.AutorId} não existe.");
+                }
+
                 var postagem = _mapper.Map<Postagem>(postDTO);
 
                 postagem.DataCriacao = DateTime.UtcNow;
