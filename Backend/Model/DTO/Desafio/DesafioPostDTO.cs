@@ -2,6 +2,11 @@ using System.ComponentModel.DataAnnotations;
 
 namespace Backend.Model
 {
+    public class AlternativaPostDTO
+    {
+        public string? Texto { get; set; }
+        public bool Correta { get; set; }
+    }
     public class DesafioPostDTO
     {
         [Required(ErrorMessage = "O campo é obrigatório.")]
@@ -14,5 +19,6 @@ namespace Backend.Model
         public int UsuarioId { get; set; }
         [Required(ErrorMessage = "O campo é obrigatório.")]
         public int ModuloId { get; set; }
+        public List<AlternativaPostDTO>? Alternativas { get; set; }
     }
 }

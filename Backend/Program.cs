@@ -21,6 +21,7 @@ builder.Services.AddCors(options =>
 builder.Services.AddDbContext<AppDbContext>(opt => opt.UseNpgsql(builder.Configuration.GetConnectionString("DbConnectionString")));
 
 builder.Services.AddAutoMapper(AppDomain.CurrentDomain.GetAssemblies());
+builder.Services.AddAutoMapper(typeof(DesafioProfile));
 
 builder.Services.AddScoped<IEncryptService, EncryptService>();
 builder.Services.AddScoped<IJwtService, JwtService>();

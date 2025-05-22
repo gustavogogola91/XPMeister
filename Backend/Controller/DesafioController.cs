@@ -27,7 +27,18 @@ namespace Backend.Controller
 
             try
             {
+                // Mapeia o DTO para a entidade Desafio
                 var desafio = _mapper.Map<Desafio>(dto);
+
+                // Garante que as alternativas estejam associadas ao desafio
+                if (dto.Alternativas != null && dto.Alternativas.Any())
+                {
+                    desafio.Alternativas = dto.Alternativas.Select(a => new Alternativa
+                    {
+                        Texto = a.Texto,
+                        Correta = a.Correta
+                    }).ToList();
+                }
 
                 await _database.tb_desafios.AddAsync(desafio);
                 await _database.SaveChangesAsync();
