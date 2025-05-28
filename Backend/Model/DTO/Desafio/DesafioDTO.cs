@@ -11,6 +11,7 @@ namespace Backend.Model
         public double PontuacaoMaxima { get; set; }
         public UsuarioDTO? Usuario { get; set; }
         public ModuloDTO? Modulo { get; set; }
+        public ICollection<QuestaoDTO>? Questoes { get; set; }
         public bool Ativo { get; set; }
     }
 }
