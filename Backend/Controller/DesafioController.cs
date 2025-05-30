@@ -99,6 +99,33 @@ namespace Backend.Controller
             }
         }
 
+        [HttpGet("buscar-desafios-modulo/{idModulo}")]
+        public async Task<IActionResult> BuscarDesafioM(int idModulo)
+        {
+            if (idModulo <= 0)
+                {
+                    return BadRequest("ID do módulo inválido!");
+                }
+
+            try {
+                var desafios = await _database.tb_desafios
+                    .Where(d => d.ModuloId == idModulo && d.Ativo)
+                    .Include(d => d.Questoes)
+                    .ToListAsync();
+
+                if (desafios == null || !desafios.Any())
+                {
+                    return NotFound($"Não existem desafios cadastrados para o módulo com ID {idModulo}.");
+                }
+
+                var desafiosDto = _mapper.Map<List<DesafioDTO>>(desafios);
+                return Ok(desafiosDto);
+
+            } catch (Exception ex) {
+                return StatusCode(500, new { erro = "Erro ao buscar desafios por módulo", detalhe = ex.Message });
+            }
+        }
+
         [HttpPut("alterar-desafio/{id}")]
         public async Task<IActionResult> AlterarDesafio(int id, [FromBody] DesafioPutDTO dto)
         {

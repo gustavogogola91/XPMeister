@@ -18,7 +18,7 @@ namespace Backend.Model
         public int ModuloId {get;set;}
         public Modulo? Modulo {get;set;}
         public bool Ativo { get; set; }
-        public ICollection<Questao>? Questoes { get; set; }
+        public ICollection<Questao> Questoes { get; set; } = new List<Questao>();
 
         public Desafio()
         {
