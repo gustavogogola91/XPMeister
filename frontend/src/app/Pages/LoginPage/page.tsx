@@ -59,8 +59,8 @@ function FormLogin() {
 
         if (success) {
             console.log(localStorage.getItem('AuthToken'));
-
             router.push('/Pages/AulasPage');
+
         } else {
             alert("Email ou senha inválidos!");
         }

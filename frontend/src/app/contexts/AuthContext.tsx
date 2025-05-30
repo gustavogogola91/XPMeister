@@ -60,6 +60,7 @@ export function AuthProvider({ children }: { children: ReactNode }) {
             // sessionStorage.setItem("usuarioNome", data.nome);
             // console.log("Usuário autenticado:", data.id, data.nome);
             console.log(response.json); //tirar apos debug
+            localStorage.setItem('UserId', data.id)
 
             return data;
         } catch (error) {
