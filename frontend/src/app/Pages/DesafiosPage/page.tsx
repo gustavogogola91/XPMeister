@@ -31,6 +31,8 @@ export default function DesafiosPage() {
   }
 
 function DesafiosAside() {
+    const router = useRouter();
+
     return (
         <>
         <aside className="hidden md:inline w-77 border-2 border-purple-500 rounded h-[250px] p-4">
@@ -39,7 +41,10 @@ function DesafiosAside() {
                 <li className="px-2 py-1 hover:bg-gray-100 rounded">Aula 1 – Introdução</li>
                 <li className="px-2 py-1 hover:bg-gray-100 rounded">Aula 2 – Desenvolvimento</li>
                 <li className="px-2 py-1 hover:bg-gray-100 rounded">Aula 3 – Conclusão</li>
-                <li className="text-purple-600 font-semibold px-2 py-1 bg-gray-200 rounded border-1 border-purple-600">DESAFIO –<span className="text-black"> CRIE UM PROJETO</span></li>
+                <li className="text-purple-600 font-semibold px-2 py-1 bg-gray-200 rounded border-1 border-purple-600 cursor-pointer"
+                    onClick={() => router.push("/Pages/DesafiosPage")}
+                >DESAFIO –<span className="text-black"> Perguntas e Respostas</span>
+                </li>
             </ul>
         </aside>
         </>
@@ -51,7 +56,7 @@ function DesafiosMain() {
     const [loading, setLoading] = useState(true);
     const [selecionadas, setSelecionadas] = useState<{ [desafioId: number]: number | null }>({});
     const [resultado, setResultado] = useState<string | null>(null);
-    const [enviado, setEnviado] = useState(false); // NOVO
+    const [enviado, setEnviado] = useState(false);
 
     useEffect(() => {
         async function getDesafios() {
@@ -159,9 +164,7 @@ function DesafiosFooter() {
     return(
         <>
         <div className="w-full mt-6 flex justify-between items-center">
-            <button className="px-4 py-2 bg-purple-200 text-purple-600 rounded font-semibold">← Aula anterior</button>
-
-            <button className="px-4 py-2 bg-purple-200 text-purple-600 rounded font-semibold">Próxima aula →</button>
+            <button className="px-4 py-2 bg-purple-200 text-purple-600 rounded font-semibold">← Aula anterior</button>     
         </div>
         </>
     );
