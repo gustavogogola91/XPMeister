@@ -112,10 +112,11 @@ namespace Backend.Controller
                 {
                     modulo.Titulo = moduloAlterado.Titulo;
                 }
-                if (moduloAlterado.Dificuldade == 0)
+                /*if (moduloAlterado.Dificuldade == 0)
                 {
                     modulo.Dificuldade = moduloAlterado.Dificuldade;
-                }
+                }*/
+                modulo.Dificuldade = moduloAlterado.Dificuldade;
                 if (moduloAlterado.Descricao != null)
                 {
                     modulo.Descricao = moduloAlterado.Descricao;

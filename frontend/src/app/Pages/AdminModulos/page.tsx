@@ -8,19 +8,22 @@ import { zodResolver } from "@hookform/resolvers/zod";
 
 type Modulo = {
   id: number;
-  nome: string;
-  ordem: number;
+  titulo: string;
+  descricao: string;
+  dificuldade: string;
 };
 
-const moduloSchema = z.object({
+const editarModuloSchema = z.object({
   id: z.number().int().positive(),
-  nome: z.string().min(3, "O nome deve ter ao menos 3 caracteres."),
-  ordem: z
-    .number({ invalid_type_error: "A ordem deve ser um número." })
-    .int("A ordem deve ser um número inteiro.")
-    .positive("A ordem deve ser maior que zero."),
+  titulo: z.string().min(3, "O título deve ter ao menos 3 caracteres."),
+  descricao: z.string().min(1, "Informe a descrição do módulo."),
+  dificuldade: z
+    .number({ invalid_type_error: "Dificuldade inválida." })
+    .int("Dificuldade deve ser um inteiro.")
+    .min(0, "Dificuldade mínima = 0")
+    .max(3, "Dificuldade máxima = 3"),
 });
-type ModuloForm = z.infer<typeof moduloSchema>;
+type EditarModuloForm = z.infer<typeof editarModuloSchema>;
 
 const BACKEND_URL = "http://localhost:5017";
 
@@ -30,14 +33,13 @@ export default function AdminModulosPage() {
     handleSubmit,
     reset,
     formState: { errors: formErrors, isSubmitting },
-  } = useForm<ModuloForm>({
-    resolver: zodResolver(moduloSchema),
-    defaultValues: { id: 0, nome: "", ordem: 1 },
+  } = useForm<EditarModuloForm>({
+    resolver: zodResolver(editarModuloSchema),
+    defaultValues: { id: 0, titulo: "", descricao: "", dificuldade: 0 },
   });
 
   const [loading, setLoading] = useState(true);
   const [error, setError] = useState<string | null>(null);
-
   const [modulos, setModulos] = useState<Modulo[]>([]);
   const [editingId, setEditingId] = useState<number | null>(null);
 
@@ -47,20 +49,34 @@ export default function AdminModulosPage() {
 
     try {
       const res = await fetch(`${BACKEND_URL}/modulo`);
-    if (res.status === 404) {
-      setModulos([]);
-      setLoading(false);
-      return;
-    }
-    if (!res.ok) {
-      throw new Error(`Erro ${res.status}: falha ao obter módulos.`);
-    }
-    const data: Modulo[] = await res.json();
-    setModulos(data);
-      
+      if (res.status === 404) {
+        // Se back retornar 404, tratar como lista vazia
+        setModulos([]);
+        setLoading(false);
+        return;
+      }
+      if (!res.ok) {
+        throw new Error(`Erro ${res.status}: falha ao obter módulos.`);
+      }
+
+      const data: Array<{
+        id: number;
+        titulo: string;
+        descricao: string;
+        dificuldade: string;
+      }> = await res.json();
+
+      setModulos(
+        data.map((m) => ({
+          id: m.id,
+          titulo: m.titulo,
+          descricao: m.descricao,
+          dificuldade: m.dificuldade,
+        }))
+      );
       setLoading(false);
     } catch (err: any) {
-      setError(err.message || "Erro desconhecido ao carregar módulos.");
+      setError(err.message || "Erro ao carregar módulos.");
       setLoading(false);
     }
   };
@@ -71,33 +87,54 @@ export default function AdminModulosPage() {
 
   const startEdit = (modulo: Modulo) => {
     setEditingId(modulo.id);
-    reset(modulo);
+
+    let difNum = 0;
+    if (modulo.dificuldade.toLowerCase().includes("fac")) {
+      difNum = 1;
+    } else if (modulo.dificuldade.toLowerCase().includes("mé") || modulo.dificuldade.toLowerCase().includes("med")) {
+      difNum = 2;
+    } else if (modulo.dificuldade.toLowerCase().includes("dif")) {
+      difNum = 3;
+    } else {
+      difNum = 0;
+    }
+
+    reset({
+      id: modulo.id,
+      titulo: modulo.titulo,
+      descricao: modulo.descricao,
+      dificuldade: difNum,
+    });
     setError(null);
   };
 
   const cancelEdit = () => {
     setEditingId(null);
-    reset({ id: 0, nome: "", ordem: 1 });
+    reset({ id: 0, titulo: "", descricao: "", dificuldade: 0 });
   };
 
-  const onSubmit = async (data: ModuloForm) => {
+  const onSubmit = async (data: EditarModuloForm) => {
     setError(null);
     try {
       const res = await fetch(`${BACKEND_URL}/modulo/${data.id}`, {
         method: "PUT",
         headers: { "Content-Type": "application/json" },
-        body: JSON.stringify({ nome: data.nome, ordem: data.ordem }),
+        body: JSON.stringify({
+          Titulo: data.titulo,
+          Descricao: data.descricao,
+          Dificuldade: data.dificuldade,
+        }),
       });
+
       if (!res.ok) {
-        throw new Error(`Erro ${res.status}: não foi possível atualizar.`);
+        const texto = await res.text();
+        throw new Error(`Erro ${res.status}: ${texto || "não foi possível atualizar."}`);
       }
-      setModulos((prev) =>
-        prev.map((m) =>
-          m.id === data.id ? { ...m, nome: data.nome, ordem: data.ordem } : m
-        )
-      );
+
+      await fetchModulos();
+
       setEditingId(null);
-      reset({ id: 0, nome: "", ordem: 1 });
+      reset({ id: 0, titulo: "", descricao: "", dificuldade: 0 });
     } catch (err: any) {
       setError(err.message || "Erro ao atualizar módulo.");
     }
@@ -110,7 +147,8 @@ export default function AdminModulosPage() {
     try {
       const res = await fetch(`${BACKEND_URL}/modulo/${id}`, { method: "DELETE" });
       if (!res.ok) {
-        throw new Error(`Erro ${res.status}: não foi possível excluir.`);
+        const texto = await res.text();
+        throw new Error(`Erro ${res.status}: ${texto || "não foi possível excluir."}`);
       }
       setModulos((prev) => prev.filter((m) => m.id !== id));
       if (editingId === id) cancelEdit();
@@ -144,7 +182,7 @@ export default function AdminModulosPage() {
 
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
-      {/* Cabeçalho com título e botão de voltar */}
+      {/* Cabeçalho com botão “Voltar ao Dashboard” */}
       <div className="max-w-4xl mx-auto flex items-center justify-between mb-6">
         <h1 className="text-2xl font-bold text-gray-800">Gerenciar Módulos</h1>
         <Link
@@ -155,7 +193,7 @@ export default function AdminModulosPage() {
         </Link>
       </div>
 
-      {/* Conteúdo: tabela */}
+      {/* Tabela de módulos */}
       <div className="max-w-4xl mx-auto bg-white shadow rounded-lg p-6">
         {modulos.length === 0 ? (
           <p className="text-gray-600">Não há módulos cadastrados.</p>
@@ -164,39 +202,62 @@ export default function AdminModulosPage() {
             <thead>
               <tr className="bg-gray-100">
                 <th className="border px-4 py-2 text-left">ID</th>
-                <th className="border px-4 py-2 text-left">Nome</th>
-                <th className="border px-4 py-2 text-left">Ordem</th>
+                <th className="border px-4 py-2 text-left">Título</th>
+                <th className="border px-4 py-2 text-left">Descrição</th>
+                <th className="border px-4 py-2 text-left">Dificuldade</th>
                 <th className="border px-4 py-2 text-center">Ações</th>
               </tr>
             </thead>
             <tbody>
               {modulos.map((modulo) =>
                 editingId === modulo.id ? (
-                  // Linha em modo edição
                   <tr key={modulo.id} className="bg-yellow-50">
                     <td className="border px-4 py-2">{modulo.id}</td>
+
+                    {/* Título editável */}
                     <td className="border px-4 py-2">
                       <input
                         type="text"
-                        {...register("nome")}
+                        {...register("titulo")}
                         className="w-full border rounded px-2 py-1"
                         disabled={isSubmitting}
                       />
-                      {formErrors.nome && (
-                        <p className="text-sm text-red-600">{formErrors.nome.message}</p>
+                      {formErrors.titulo && (
+                        <p className="text-sm text-red-600">{formErrors.titulo.message}</p>
                       )}
                     </td>
+
+                    {/* Descrição editável */}
                     <td className="border px-4 py-2">
                       <input
-                        type="number"
-                        {...register("ordem", { valueAsNumber: true })}
-                        className="w-20 border rounded px-2 py-1"
+                        type="text"
+                        {...register("descricao")}
+                        className="w-full border rounded px-2 py-1"
                         disabled={isSubmitting}
                       />
-                      {formErrors.ordem && (
-                        <p className="text-sm text-red-600">{formErrors.ordem.message}</p>
+                      {formErrors.descricao && (
+                        <p className="text-sm text-red-600">{formErrors.descricao.message}</p>
                       )}
                     </td>
+
+                    {/* Dificuldade editável (SELECT de números) */}
+                    <td className="border px-4 py-2">
+                      <select
+                        {...register("dificuldade", { valueAsNumber: true })}
+                        className="w-full border rounded px-2 py-1"
+                        disabled={isSubmitting}
+                      >
+                        <option value={0}>Desconhecido</option>
+                        <option value={1}>Fácil</option>
+                        <option value={2}>Médio</option>
+                        <option value={3}>Difícil</option>
+                      </select>
+                      {formErrors.dificuldade && (
+                        <p className="text-sm text-red-600">{formErrors.dificuldade.message}</p>
+                      )}
+                    </td>
+
+                    {/* Botões “Salvar” / “Cancelar” */}
                     <td className="border px-4 py-2 text-center space-x-2">
                       <button
                         onClick={handleSubmit(onSubmit)}
@@ -215,11 +276,14 @@ export default function AdminModulosPage() {
                     </td>
                   </tr>
                 ) : (
-                  // Linha normal somente leitura
                   <tr key={modulo.id} className="hover:bg-gray-50">
                     <td className="border px-4 py-2">{modulo.id}</td>
-                    <td className="border px-4 py-2">{modulo.nome}</td>
-                    <td className="border px-4 py-2">{modulo.ordem}</td>
+                    <td className="border px-4 py-2">{modulo.titulo}</td>
+                    <td className="border px-4 py-2">{modulo.descricao}</td>
+
+                    {/* Aqui exibe 'modulo.dificuldade' */}
+                    <td className="border px-4 py-2">{modulo.dificuldade}</td>
+
                     <td className="border px-4 py-2 text-center space-x-2">
                       <button
                         onClick={() => startEdit(modulo)}
