@@ -73,9 +73,9 @@ function DesafiosMain() {
             <div key={desafio.id || i} className="mb-8 w-full">
                 <h2 className="text-lg font-bold mb-2">{desafio.titulo}</h2>
                 <p className="mb-4">{desafio.descricao}</p>
-                {desafio.questoes && desafio.questoes.length > 0 ? (
+                {desafio.alternativas && desafio.alternativas.length > 0 ? (
                     <ul className="space-y-2">
-                        {desafio.questoes.map((questao: any, idx: number) => (
+                        {desafio.alternativas.map((questao: any, idx: number) => (
                             <li key={questao.id || idx}>
                                 <button className="w-full text-left px-4 py-2 bg-gray-100 hover:bg-purple-100 rounded">
                                     {questao.texto}
@@ -84,7 +84,7 @@ function DesafiosMain() {
                         ))}
                     </ul>
                 ) : (
-                    <p>Nenhuma questão cadastrada.</p>
+                    <p>Nenhuma alternativa cadastrada.</p>
                     )}
             </div>
             ))}
@@ -106,15 +106,4 @@ function DesafiosFooter() {
         </div>
         </>
     );
-}
-
-function Questao({ questao } : { questao: any }) {
-    return (
-        <>
-        <div className="h-auto md:h-auto w-full bg-white rounded border border-purple-300 p-4 mb-4">
-            <p className="text-lg font-semibold mb-4">{questao.texto || "Pergunta"}</p>
-        </div>
-        </>
-    );
-    
 }
