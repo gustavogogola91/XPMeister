@@ -54,7 +54,7 @@ const ModulosPage = () => {
                     },
                 });
 
-                if (!response.ok) {
+                if (response.status === 401) {
                     router.push("LoginPage");
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }

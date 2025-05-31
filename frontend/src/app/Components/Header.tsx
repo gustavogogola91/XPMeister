@@ -6,18 +6,6 @@ import { AlignJustify, X } from "lucide-react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 
-function clearOauthTokenCookie(router: any) {
-    const cookieName = "auth-token";
-
-    // Tenta apagar o cookie com várias combinações
-    document.cookie = `${cookieName}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/`;
-    document.cookie = `${cookieName}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=`;
-    document.cookie = `${cookieName}=;expires=Thu, 01 Jan 1970 00:00:00 GMT;path=/;domain=${window.location.hostname}`;
-
-    alert("Cookie auth-token limpo!");
-    router.push("/Pages/LoginPage");
-}
-
 const DefaultHeader = () => {
     return (
         <div className="w-full shadow flex flex-col gap-1 items-center justify-between px-18 pb-4 md:flex-row md:pb-0">
@@ -54,30 +42,16 @@ const AuthenticatedHeader = () => {
                 <a href="*" className="font-semibold">Contato</a>
 
                 <button className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
-                    {isOpen ? (
-                        <h2 className="w-8 font-bold">X</h2>
-                    ) : (
-                        <img src="/MenuIcon.png" className="w-8" alt="MenuIcon" />
-                    )}
+                    {isOpen ? <X size={30} /> : <AlignJustify size={30} />}
                 </button>
-                            <button className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
-                                {isOpen ? <X size={30}/>: <AlignJustify size={30}/>}
-                            </button>
-                            {isOpen && (
-                                <ul className="mt-4 flex flex-col justify-center font-semibold absolute right-24 top-32 md:right-36 md:top-12 bg-white gap-2 text-black rounded border-b-5 border-purple shadow-xl py-4 px-4 space-y-2 z-50 transition-all duration-1300 ease-out">
-                                    <li><Link href={"ModulosPage"}>Módulos</Link></li>
-                                    <li><Link href={"AulasPage"}>Aula</Link></li>
-                                    <li><Link href={"AlunoConfigPage"}>Configurações</Link></li>
-                                    <button onClick={handleUserLogout} className="cursor-pointer m-auto bg-red-500 w-full m-2 text-white font-bold rounded">Logout</button>
-                                </ul>
-                            )}
-                            <a href="*" className="font-semibold bg-white p-[2px] rounded-full">
-                                <img src="/UserIcon.png" alt="UserIcon"
-                                    className="min-w-[30px] min-h[30px] max-w-[40px] max-h-[40px]" />
-                            </a>
-
-                        </div>
-
+                {isOpen && (
+                    <ul className="mt-4 flex flex-col justify-center font-semibold absolute right-24 top-32 md:right-36 md:top-12 bg-white gap-2 text-black rounded border-b-5 border-purple shadow-xl py-4 px-4 space-y-2 z-50 transition-all duration-1300 ease-out">
+                        <li><Link href={"ModulosPage"}>Módulos</Link></li>
+                        <li><Link href={"AulasPage"}>Aula</Link></li>
+                        <li><Link href={"AlunoConfigPage"}>Configurações</Link></li>
+                        <button onClick={handleUserLogout} className="cursor-pointer m-auto bg-red-500 w-full m-2 text-white font-bold rounded">Logout</button>
+                    </ul>
+                )}
 
                 <a href="*" className="font-semibold bg-white p-[2px] rounded-full">
                     <img

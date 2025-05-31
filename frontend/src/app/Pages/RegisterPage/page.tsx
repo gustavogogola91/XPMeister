@@ -33,7 +33,6 @@ export default function RegisterPage() {
         </div>
 
       </div>
-    </div>
   );
 }
 
@@ -61,10 +60,6 @@ export default function RegisterPage() {
         console.log("Aconteceu alguma pica ai, se vira!");
 
     }
-  } catch (error) {
-    console.error("Erro:", error);
-    console.log("Aconteceu alguma pica ai, se vira!");
-  }
 }
 
 async function getUsuarios(email: string) {
@@ -90,10 +85,6 @@ async function getUsuarios(email: string) {
         console.error("Erro:", error);
         console.log("Aconteceu alguma pica ai, se vira!");
     }
-  } catch (error) {
-    console.error("Erro:", error);
-    console.log("Aconteceu alguma pica ai, se vira!");
-  }
 }
 
 function FormRegister() {
@@ -125,6 +116,7 @@ function FormRegister() {
             return;
         }
         await postUsuario(registerData.nome, registerData.email, registerData.senha);
+        router.push('LoginPage');
     
     };
 
@@ -141,20 +133,3 @@ function FormRegister() {
     );
   }
 
-    await postUsuario(registerData.nome, registerData.email, registerData.senha);
-
-    router.push("/Pages/LoginPage");
-  };
-
-  return (
-    <>
-      <form className="base-form flex flex-col w-full max-w-xs gap-4" onSubmit={handleSubmit}>
-        <input name="nome" type="text" placeholder="Nome Completo" value={registerData.nome} onChange={handleChange} required />
-        <input name="email" type="email" placeholder="Email" value={registerData.email} onChange={handleChange} required />
-        <input name="senha" type="password" placeholder="Senha" value={registerData.senha} onChange={handleChange} required />
-        <input name="confirmarSenha" type="password" placeholder="Confirmar Senha" value={registerData.confirmarSenha} onChange={handleChange} required />
-        <button type="submit" className="btn-primary py-2 text-[16px] font-bold"> Criar Conta </button>
-      </form>
-    </>
-  );
-}
