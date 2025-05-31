@@ -40,7 +40,7 @@ const AuthenticatedHeader = () => {
                 <span className="text-[60px] font-black">XP</span>Meister
             </p>
             <div className="flex items-center text-white flex-row md:text-[18px] gap-4 md:gap-10">
-                <a href="*" className="font-semibold">Sobre</a>
+                <a href="/Pages/HomePage" className="font-semibold">Sobre</a>
                 <a href="*" className="font-semibold">Contato</a>
 
                 <button className="cursor-pointer" onClick={() => setIsOpen(!isOpen)}>
@@ -53,11 +53,6 @@ const AuthenticatedHeader = () => {
 
                 {isOpen && (
                     <ul className="mt-4 absolute right-24 top-32 md:right-36 md:top-12 bg-white text-black rounded-xl shadow-xl py-4 px-4 space-y-2 z-50 transition-all duration-1300 ease-out">
-                        <li>Teste</li>
-                        <li>Teste</li>
-                        <li>Teste</li>
-                        <li>Teste</li>
-                        <li>Teste</li>
                         <li>
                             <button
                                 onClick={() => clearOauthTokenCookie(router)}
