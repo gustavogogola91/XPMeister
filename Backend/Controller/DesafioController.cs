@@ -60,7 +60,6 @@ namespace Backend.Controller
                 var desafios = await _database.tb_desafios
                     .Include(d => d.Modulo)
                         .ThenInclude(m => m.Aulas)
-                    .Include(d => d.Usuario)
                     .Include(d => d.Alternativas) 
                     .ToListAsync();
                 
@@ -85,7 +84,7 @@ namespace Backend.Controller
             }
 
             try {
-                var desafio = await _database.tb_desafios.Include(d => d.Modulo).Include(d => d.Usuario).FirstOrDefaultAsync(d => d.Id == id);
+                var desafio = await _database.tb_desafios.Include(d => d.Modulo).FirstOrDefaultAsync(d => d.Id == id);
                 if (desafio == null)
                 {
                     return NotFound($"Desafio com ID {id} não encontrado.");
@@ -140,15 +139,10 @@ namespace Backend.Controller
                 if (desafioOld == null)
                     return NotFound($"Desafio com ID {id} não encontrado.");
 
-                var usuarioExiste = await _database.tb_usuario.AnyAsync(u => u.Id == dto.UsuarioId);
-                if (!usuarioExiste)
-                    return BadRequest("Usuário informado não existe.");
-
                 desafioOld.Titulo           = dto.Titulo!;
                 desafioOld.Descricao        = dto.Descricao!;
                 desafioOld.NivelDificuldade = dto.NivelDificuldade;
                 desafioOld.PontuacaoMaxima  = dto.PontuacaoMaxima;
-                desafioOld.UsuarioId        = dto.UsuarioId;
                 desafioOld.ModuloId         = dto.ModuloId;
 
                 _database.tb_desafios.Update(desafioOld);

@@ -21,6 +21,12 @@ namespace Backend.config
 
             CreateMap<Modulo, ModuloDTO>();
             CreateMap<ModuloPostDTO, Modulo>();
+
+            CreateMap<AlternativaPostDTO, Alternativa>();
+
+            CreateMap<DesafioPostDTO, Desafio>();
+
+            CreateMap<Alternativa, AlternativaDTO>();
         }
     }
 }
