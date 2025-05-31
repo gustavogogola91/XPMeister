@@ -4,7 +4,6 @@ import React, { useEffect, useState } from "react";
 import Link from "next/link";
 import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
-// Importa todo o módulo jwt-decode como “jwt_decode”
 import * as jwt_decode from "jwt-decode";
 
 type JwtPayload = {
@@ -30,10 +29,7 @@ export default function AdminDashboardPage() {
 
     let payload: JwtPayload | null = null;
     try {
-      // Dependendo de como o pacote estiver empacotado, a função de decodificar pode estar em default
-      // Use (jwt_decode as any)(token) se jwt_decode ser a função diretamente
       payload = (jwt_decode as any)(token);
-      // Ou, se for necessário:
       // payload = (jwt_decode as any).default(token);
     } catch (err) {
       setError("Token de autenticação inválido ou expirado. Faça login novamente.");
