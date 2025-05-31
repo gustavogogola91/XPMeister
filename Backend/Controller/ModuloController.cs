@@ -1,13 +1,14 @@
 using AutoMapper;
 using Backend.Data;
 using Backend.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 namespace Backend.Controller
 {
     [ApiController]
     [Route("modulo")]
+    
     public class ModuloController : ControllerBase
     {
         private readonly AppDbContext _database;

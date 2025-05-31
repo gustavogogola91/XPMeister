@@ -1,10 +1,12 @@
 "use client";
 
 import { useContext, useEffect, useState } from "react";
-import { AuthContext } from "../../contexts/AuthContext";
-import { SignInData } from "../../contexts/AuthContext";
+import { SignInData, AuthContext } from "../../contexts/AuthContext";
 import { useRouter } from 'next/navigation'; // correct hook for App Router
 import { parseCookies } from "nookies";
+import Link from "next/link";
+
+const apiUrl = "http://localhost:5017"
 
 export default function Login() {
     return (
@@ -13,29 +15,49 @@ export default function Login() {
                 <h2 className="text-4xl text-purple font-black underline mb-4">BEM-VINDO</h2>
                 <p className="text-center mb-8 text-base">Faça o login para continuar sua <span className="font-bold text-purple">jornada de aprendizado!!</span></p>
                 <FormLogin />
-                <p className="mt-6 text-sm">Não tem conta? <a href="#" className="font-bold hover:underline">Cadastre-se</a></p>
+                <p className="mt-6 text-sm">Não tem conta? <Link href={"RegisterPage"} className="font-bold hover:underline">Cadastre-se</Link></p>
             </div>
         </div>
     );
 }
 
 
+
+
 function FormLogin() {
     const router = useRouter();
-
+    const { IsAuthenticated } = useContext(AuthContext);
+    const { loginUsuario } = useContext(AuthContext);
+    const { logoutUsuario } = useContext(AuthContext);
     const { 'auth-token': AuthToken } = parseCookies();
+
+    async function ValidateToken(AuthToken: string) {
+    const response = await fetch(`${apiUrl}/usuario/token`, {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${AuthToken}`,
+        },
+    })
+
+    if(!response.ok){
+        logoutUsuario()
+    }
+
+}
+
+    ValidateToken(AuthToken);
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
-
-            if (AuthToken) {
-                router.push('/Pages/AulasPage');
+            console.log(IsAuthenticated);
+            
+            if (IsAuthenticated) {
+                router.push('/Pages/AulasPage')
             }
         }
     }, [router]);
 
 
-    const { loginUsuario } = useContext(AuthContext);
 
     const [loginData, setLoginData] = useState({
         email: "",
@@ -77,8 +99,8 @@ function FormLogin() {
     return (
         <>
             <form className="base-form flex flex-col w-full max-w-xs gap-4" onSubmit={handleSubmit}>
-                <input name="email" type="email" placeholder="Email" className="" value={loginData.email} onChange={handleChange} required />
-                <input name="senha" type="password" placeholder="Senha" className="" value={loginData.senha} onChange={handleChange} required />
+                <input name="email" type="email" placeholder="Email" className="focus:border-purple focus:outline-0" value={loginData.email} onChange={handleChange} required />
+                <input name="senha" type="password" placeholder="Senha" className="focus:border-purple focus:outline-0" value={loginData.senha} onChange={handleChange} required />
                 <button type="submit" className="btn-primary py-2 text-[16px] font-bold"> Entrar </button>
             </form>
         </>

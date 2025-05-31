@@ -4,6 +4,7 @@ using Backend.Data;
 using Backend.Model;
 using Backend.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controller
 {
@@ -49,6 +50,15 @@ namespace Backend.Controller
                 return StatusCode(500, ex);
             }
         }
+
+        [HttpGet("token")]
+        [Authorize]
+        public IActionResult CheckTokenValidity()
+        {
+            return Ok(new { valid = true });
+        }
+
+
 
         [HttpPost("login")]
         public async Task<ActionResult> LoginUsuario([FromBody] LoginDTO model)
