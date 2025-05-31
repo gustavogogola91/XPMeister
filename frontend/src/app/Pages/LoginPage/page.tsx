@@ -9,6 +9,40 @@ import Link from "next/link";
 const apiUrl = "http://localhost:5017"
 
 export default function Login() {
+    const { 'auth-token': AuthToken } = parseCookies();
+    const { logoutUsuario } = useContext(AuthContext);
+    const { IsAuthenticated } = useContext(AuthContext);
+    const router = useRouter();
+
+    async function ValidateToken(AuthToken: string) {
+    const response = await fetch(`${apiUrl}/usuario/token`, {
+        method: "GET",
+        headers: {
+            'Authorization': `Bearer ${AuthToken}`,
+        },
+    })
+
+    if(!response.ok){
+        logoutUsuario()
+    }
+    console.log("teste")
+
+    
+}
+    useEffect(() => {
+        if (typeof window !== 'undefined') {
+            console.log(IsAuthenticated);
+            
+            if (IsAuthenticated) {
+                router.push('/Pages/ModulosPage');
+            }
+        }
+    }, [router]);
+
+
+
+    ValidateToken(AuthToken);
+
     return (
         <div className="flex flex-col gap-10 items-center mb-20">
             <div className="flex flex-col items-center justify-center flex-1 p-6">
@@ -26,38 +60,9 @@ export default function Login() {
 
 function FormLogin() {
     const router = useRouter();
-    const { IsAuthenticated } = useContext(AuthContext);
+    
     const { loginUsuario } = useContext(AuthContext);
-    const { logoutUsuario } = useContext(AuthContext);
-    const { 'auth-token': AuthToken } = parseCookies();
-
-    async function ValidateToken(AuthToken: string) {
-    const response = await fetch(`${apiUrl}/usuario/token`, {
-        method: "GET",
-        headers: {
-            'Authorization': `Bearer ${AuthToken}`,
-        },
-    })
-
-    if(!response.ok){
-        logoutUsuario()
-    }
-
-}
-
-    ValidateToken(AuthToken);
-
-    useEffect(() => {
-        if (typeof window !== 'undefined') {
-            console.log(IsAuthenticated);
-            
-            if (IsAuthenticated) {
-                router.push('/Pages/AulasPage')
-            }
-        }
-    }, [router]);
-
-
+    
 
     const [loginData, setLoginData] = useState({
         email: "",
@@ -82,7 +87,7 @@ function FormLogin() {
         if (success) {
             console.log(localStorage.getItem('AuthToken'));
 
-            router.push('/Pages/AulasPage');
+            router.push('/Pages/ModulosPage');
         } else {
             alert("Email ou senha inválidos!");
         }
