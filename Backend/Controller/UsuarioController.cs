@@ -2,7 +2,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
 using Backend.Data;
 using Backend.Model;
-using Backend.Model.DTOs;
 using Backend.Services;
 using AutoMapper;
 using Microsoft.AspNetCore.Authorization;
@@ -14,22 +13,20 @@ namespace Backend.Controller
     public class UsuarioController : ControllerBase
     {
         private readonly AppDbContext _appDbContext;
-        private readonly IConfiguration _config;
         private readonly IEncryptService _hasher;
         private readonly IMapper _mapper;
         private readonly IJwtService _jwtService;
 
-        public UsuarioController(AppDbContext appDbContext, IConfiguration config, IEncryptService hasher, IMapper mapper, IJwtService jwtService)
+        public UsuarioController(AppDbContext appDbContext, IEncryptService hasher, IMapper mapper, IJwtService jwtService)
         {
             _appDbContext = appDbContext;
-            _config = config;
             _hasher = hasher;
             _mapper = mapper;
             _jwtService = jwtService;
         }
 
         [HttpPost]
-        public async Task<IActionResult> AddUsuario([FromBody] Usuario usuario)
+        public async Task<IActionResult> AddUsuario([FromBody] UsuarioPostDTO dto)
         {
             if (!ModelState.IsValid)
             {
@@ -38,10 +35,15 @@ namespace Backend.Controller
 
             try
             {
+                var usuario = _mapper.Map<Usuario>(dto);
+
                 usuario.Senha = _hasher.HashUserPassword(usuario.Senha!);
+                usuario.Ativo = true;
                 _appDbContext.tb_usuario.Add(usuario);
                 await _appDbContext.SaveChangesAsync();
-                return Created("Usuario criado com sucesso", usuario);
+
+                var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
+                return Created("Usuario criado com sucesso", usuarioDto);
             }
             catch (Exception ex)
             {
@@ -82,16 +84,18 @@ namespace Backend.Controller
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Usuario>>> GetUsuarios()
+        public async Task<ActionResult<IEnumerable<UsuarioDTO>>> GetUsuarios()
         {
             try
             {
-                var usuarios = await _appDbContext.tb_usuario.Include(u => u.estudo).ToListAsync();
+                var usuarios = await _appDbContext.tb_usuario.ToListAsync();
                 if (usuarios == null || !usuarios.Any())
                 {
                     return NotFound("Sem usuários no sistema");
                 }
-                return Ok(usuarios);
+
+                var usuariosDto = _mapper.Map<List<UsuarioDTO>>(usuarios);
+                return Ok(usuariosDto);
             }
             catch (Exception ex)
             {
@@ -100,7 +104,7 @@ namespace Backend.Controller
         }
 
         [HttpGet("{id}")]
-        public async Task<ActionResult<Usuario>> GetUsuariosId(int id)
+        public async Task<ActionResult<UsuarioDTO>> GetUsuariosId(int id)
         {
             try
             {
@@ -111,7 +115,8 @@ namespace Backend.Controller
                     return NotFound("Usuário não encontrado");
                 }
 
-                return Ok(usuario);
+                var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
+                return Ok(usuarioDto);
             }
             catch (Exception ex)
             {
@@ -131,7 +136,8 @@ namespace Backend.Controller
                     return NotFound("Usuário não encontrado");
                 }
 
-                return Ok(usuario);
+                var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
+                return Ok(usuarioDto);
             }
             catch (Exception ex)
             {
@@ -172,7 +178,7 @@ namespace Backend.Controller
                     }
                     if (usuario.estudo != null)
                     {
-                        usuarioExistente.estudo = usuario.estudo;
+                        usuarioExistente.Estudo = usuario.estudo;
                     }
 
                     _appDbContext.tb_usuario.Update(usuarioExistente);

@@ -4,7 +4,8 @@ import { useRouter } from "next/navigation";
 import { parseCookies } from "nookies";
 import { useEffect, useState } from "react";
 
-var apiUrl = "http://localhost:5017"
+
+var apiUrl = "http://localhost:5017";
 
 export default function RegisterPage() {
     //  const router = useRouter();
@@ -30,9 +31,11 @@ export default function RegisterPage() {
             <FormRegister/>
             <p className="mt-6 text-sm">Já tem uma conta? <a href="#" className="font-bold hover:underline">Faça Login</a></p>
         </div>
+
       </div>
-    );
-  }
+    </div>
+  );
+}
 
   async function postUsuario(nome: string, email: string, senha: string) {
     
@@ -56,17 +59,22 @@ export default function RegisterPage() {
     catch (error) {
         console.error("Erro:", error);
         console.log("Aconteceu alguma pica ai, se vira!");
-    }
-  }
 
-  async function getUsuarios(email: string) {
-    try {
-        const response = await fetch(`${apiUrl}/usuario/email/${email}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-            },
-        });
+    }
+  } catch (error) {
+    console.error("Erro:", error);
+    console.log("Aconteceu alguma pica ai, se vira!");
+  }
+}
+
+async function getUsuarios(email: string) {
+  try {
+    const response = await fetch(`${apiUrl}/usuario/email/${email}`, {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
 
         if (!response.ok) {
             console.log("Nenhum Usuário está usando esse email");
@@ -82,20 +90,25 @@ export default function RegisterPage() {
         console.error("Erro:", error);
         console.log("Aconteceu alguma pica ai, se vira!");
     }
-    }
+  } catch (error) {
+    console.error("Erro:", error);
+    console.log("Aconteceu alguma pica ai, se vira!");
+  }
+}
 
-  function FormRegister() {
-    const [registerData, setRegisterData] = useState({
-        nome: "",
-        email: "",
-        senha: "",
-        confirmarSenha: ""
-    });
+function FormRegister() {
+  const router = useRouter(); 
+  const [registerData, setRegisterData] = useState({
+    nome: "",
+    email: "",
+    senha: "",
+    confirmarSenha: ""
+  });
 
-    const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
-        const { name, value } = e.target;
-        setRegisterData({ ...registerData, [name]: value });
-    };
+  const handleChange = (e: React.ChangeEvent<HTMLInputElement>) => {
+    const { name, value } = e.target;
+    setRegisterData({ ...registerData, [name]: value });
+  };
 
     const handleSubmit = async (e: React.FormEvent) => {
         
@@ -128,6 +141,20 @@ export default function RegisterPage() {
     );
   }
 
+    await postUsuario(registerData.nome, registerData.email, registerData.senha);
 
+    router.push("/Pages/LoginPage");
+  };
 
-  // Continuar parte da autenticacao
+  return (
+    <>
+      <form className="base-form flex flex-col w-full max-w-xs gap-4" onSubmit={handleSubmit}>
+        <input name="nome" type="text" placeholder="Nome Completo" value={registerData.nome} onChange={handleChange} required />
+        <input name="email" type="email" placeholder="Email" value={registerData.email} onChange={handleChange} required />
+        <input name="senha" type="password" placeholder="Senha" value={registerData.senha} onChange={handleChange} required />
+        <input name="confirmarSenha" type="password" placeholder="Confirmar Senha" value={registerData.confirmarSenha} onChange={handleChange} required />
+        <button type="submit" className="btn-primary py-2 text-[16px] font-bold"> Criar Conta </button>
+      </form>
+    </>
+  );
+}
