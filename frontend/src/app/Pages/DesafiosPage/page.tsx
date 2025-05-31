@@ -1,5 +1,7 @@
 "use client";
 
+import { useRouter } from "next/router";
+import { parseCookies } from "nookies";
 import { useState, useEffect } from "react";
 
 var apiUrl = "http://localhost:5017"
@@ -7,11 +9,18 @@ var idModulo = 1; // localStorage.getItem("IdModulo") <- alterar quando implemen
 
 export default function DesafiosPage() {
 
+    const router = useRouter();
+    
+    const { 'auth-token': AuthToken } = parseCookies();
+
     useEffect(() => {
-        if (localStorage.getItem("UserId") === null) {
-            window.location.href = "/Pages/LoginPage";
+        if (typeof window !== 'undefined') {
+
+            if (AuthToken) {
+                router.push('/Pages/AulasPage');
+            }
         }
-    }, []);
+    }, [router]);
 
     return (
       <div className="flex flex-col my-10 md:my-0 md:flex-row items-center justify-between">
