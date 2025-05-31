@@ -14,7 +14,7 @@ namespace Backend.Data
         public DbSet<Modulo> tb_modulo { get; set; }
 
         public DbSet<Desafio> tb_desafios { get; set; }
-        public DbSet<Questao> tb_questoes { get; set; }
+        public DbSet<Alternativa> tb_alternativa { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

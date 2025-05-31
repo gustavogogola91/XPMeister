@@ -61,7 +61,7 @@ namespace Backend.Controller
                     .Include(d => d.Modulo)
                         .ThenInclude(m => m.Aulas)
                     .Include(d => d.Usuario)
-                    .Include(d => d.Questoes) 
+                    .Include(d => d.Alternativas) 
                     .ToListAsync();
                 
                 if(desafios == null || !desafios.Any()) {
@@ -110,7 +110,7 @@ namespace Backend.Controller
             try {
                 var desafios = await _database.tb_desafios
                     .Where(d => d.ModuloId == idModulo && d.Ativo)
-                    .Include(d => d.Questoes)
+                    .Include(d => d.Alternativas)
                     .ToListAsync();
 
                 if (desafios == null || !desafios.Any())
