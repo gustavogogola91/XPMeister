@@ -24,10 +24,10 @@ namespace Backend.config
             CreateMap<Modulo, ModuloDTO>();
             CreateMap<ModuloPostDTO, Modulo>();
 
-            CreateMap<Comentario, ComentarioDTO>();
+            CreateMap<Comentario, ComentarioDTO>().ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.DataCriacao.Add(new TimeSpan(0, -3, 0, 0)).ToString("dd/MM/yyyy HH:mm:ss")));
             CreateMap<ComentarioPostDTO, Comentario>();
 
-            CreateMap<Postagem, PostagemDTO>();
+            CreateMap<Postagem, PostagemDTO>().ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.DataCriacao.Add(new TimeSpan(0, -3, 0, 0)).ToString("dd/MM/yyyy HH:mm:ss")));
             CreateMap<PostagemPostDTO, Postagem>();
         }
     }

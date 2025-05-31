@@ -6,7 +6,7 @@ namespace Backend.Model.DTO.Forum
         public string? Titulo { get; set; }
         public string? Conteudo { get; set; }
         public UsuarioComentarioDTO? Autor { get; set; }
-        public DateTime? DataCriacao { get; set; }
+        public string? DataCriacao { get; set; }
         public ICollection<ComentarioDTO>? Comentarios { get; set; }
     }
 }
