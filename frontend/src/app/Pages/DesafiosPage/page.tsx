@@ -49,6 +49,9 @@ function DesafiosAside() {
 function DesafiosMain() {
     const [desafios, setDesafios] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
+    const [selecionadas, setSelecionadas] = useState<{ [desafioId: number]: number | null }>({});
+    const [resultado, setResultado] = useState<string | null>(null);
+    const [enviado, setEnviado] = useState(false); // NOVO
 
     useEffect(() => {
         async function getDesafios() {
@@ -56,7 +59,6 @@ function DesafiosMain() {
                 const response = await fetch(`${apiUrl}/desafio/buscar-desafios-modulo/${idModulo}`);
                 if (response.ok) {
                     const data = await response.json();
-                    console.log("Desafios recebidos:", data);
                     setDesafios(data);
                 } else {
                     setDesafios([]);
@@ -71,6 +73,27 @@ function DesafiosMain() {
         getDesafios();
     }, []);
 
+    const handleSelecionar = (desafioId: number, alternativaId: number) => {
+        if (enviado) return; // Impede seleção após envio
+        setSelecionadas(prev => ({
+            ...prev,
+            [desafioId]: alternativaId
+        }));
+    };
+
+    const handleEnviarResposta = () => {
+        let acertos = 0;
+        desafios.forEach((desafio) => {
+            const alternativaSelecionadaId = selecionadas[desafio.id];
+            const alternativaCorreta = desafio.alternativas.find((alt: any) => alt.correta);
+            if (alternativaCorreta && alternativaSelecionadaId === alternativaCorreta.id) {
+                acertos++;
+            }
+        });
+        setResultado(`Você acertou ${acertos} de ${desafios.length} perguntas.`);
+        setEnviado(true);
+    };
+
     if (loading) return <div>Carregando...</div>;
 
     return(
@@ -84,20 +107,47 @@ function DesafiosMain() {
                 <p className="mb-4">{desafio.descricao}</p>
                 {desafio.alternativas && desafio.alternativas.length > 0 ? (
                     <ul className="space-y-2">
-                        {desafio.alternativas.map((questao: any, idx: number) => (
-                            <li key={questao.id || idx}>
-                                <button className="w-full text-left px-4 py-2 bg-gray-100 hover:bg-purple-100 rounded">
-                                    {questao.texto}
-                                </button>
-                            </li>
-                        ))}
+                        {desafio.alternativas.map((questao: any, idx: number) => {
+                            let cor = "bg-gray-100 hover:bg-purple-100";
+                            if (enviado) {
+                                if (selecionadas[desafio.id] === questao.id) {
+                                    if (questao.correta) {
+                                        cor = "bg-green-200 text-green-800 font-bold";
+                                    } else {
+                                        cor = "bg-red-200 text-red-800 font-bold";
+                                    }
+                                }
+                            } else if (selecionadas[desafio.id] === questao.id) {
+                                cor = "bg-purple-200 text-purple-700 font-bold";
+                            }
+                            return (
+                                <li key={questao.id || idx}>
+                                    <button
+                                        type="button"
+                                        className={`w-full text-left px-4 py-2 rounded ${cor}`}
+                                        onClick={() => handleSelecionar(desafio.id, questao.id)}
+                                        disabled={enviado}
+                                    >
+                                        {questao.texto}
+                                    </button>
+                                </li>
+                            );
+                        })}
                     </ul>
                 ) : (
                     <p>Nenhuma alternativa cadastrada.</p>
-                    )}
+                )}
             </div>
             ))}
-            <button className="mt-4 px-8 py-2 bg-purple-200 rounded-b-sm text-purple-600 font-semibold">Enviar Resposta</button>
+            <button
+                className="mt-4 px-8 py-2 bg-purple-200 rounded-b-sm text-purple-600 font-semibold"
+                onClick={handleEnviarResposta}
+                disabled={enviado}
+            >Enviar Resposta
+            </button>
+            {resultado && (
+                <div className="mt-4 text-center text-lg font-bold text-purple-700">{resultado}</div>
+            )}
             <a href="*" className="text-[12px] font-bold text-purple mt-2">Problemas?</a>
             <DesafiosFooter />
         </div>
