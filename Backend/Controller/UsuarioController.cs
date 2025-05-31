@@ -94,14 +94,16 @@ namespace Backend.Controller
         {
             try
             {
-                var usuario = await _appDbContext.tb_usuario.FindAsync(id);
+            var usuario = await _appDbContext.tb_usuario
+                .Include(u => u.estudo)
+                .FirstOrDefaultAsync(u => u.Id == id);
 
-                if (usuario == null)
-                {
-                    return NotFound("Usuário não encontrado");
-                }
+            if (usuario == null)
+            {
+                return NotFound("Usuário não encontrado");
+            }
 
-                return Ok(usuario);
+            return Ok(usuario);
             }
             catch (Exception ex)
             {
@@ -199,8 +201,8 @@ namespace Backend.Controller
             }
         }
 
-        [HttpPost("tempo")]
-        public async Task<ActionResult> TempoUsuario([FromBody] TempoDeEstudo tempoEstudo)
+        [HttpPut("tempo/{id}")]
+        public async Task<IActionResult> UpdateTempoUsuario(int id, [FromBody] TempoDeEstudo tempoEstudo)
         {
             if (tempoEstudo == null)
             {
@@ -208,19 +210,30 @@ namespace Backend.Controller
             }
             try
             {
-                var tempoEstudo_ = await _appDbContext.tb_tempoEstudo.AddAsync(tempoEstudo);
-                await _appDbContext.SaveChangesAsync(); 
-                if (tempoEstudo_ == null)
+                var tempoExistente = await _appDbContext.tb_tempoEstudo.FindAsync(id);
+                if (tempoExistente == null)
                 {
-                    return NotFound("Problema na inserção no DB!");
+                    return NotFound("Tempo de estudo não encontrado!");
                 }
-                return Ok(tempoEstudo_);
+
+                tempoExistente.Segunda = tempoEstudo.Segunda;
+                tempoExistente.Terca = tempoEstudo.Terca;
+                tempoExistente.Quarta = tempoEstudo.Quarta;
+                tempoExistente.Quinta = tempoEstudo.Quinta;
+                tempoExistente.Sexta = tempoEstudo.Sexta;
+                tempoExistente.Sabado = tempoEstudo.Sabado;
+                tempoExistente.Domingo = tempoEstudo.Domingo;
+                tempoExistente.horasDiarias = tempoEstudo.horasDiarias;
+
+                _appDbContext.tb_tempoEstudo.Update(tempoExistente);
+                await _appDbContext.SaveChangesAsync();
+
+                return Ok(tempoExistente);
             }
             catch (Exception ex)
             {
                 return StatusCode(500, ex);
             }
-
         }
     }
 }
