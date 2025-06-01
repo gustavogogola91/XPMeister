@@ -76,14 +76,23 @@ export default function CreateModuloPage() {
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       {/* Cabeçalho com título e “Voltar à Lista” */}
+
       <div className="max-w-4xl mx-auto flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Criar Novo Módulo</h1>
+        <Link
+          href="/Pages/AdminDashboard"
+          className="text-sm bg-purple text-white px-3 py-1 rounded hover:bg-purple-800"
+        >
+          Voltar ao Dashboard
+        </Link>
         <Link
           href="/Pages/AdminModulos"
-          className="text-sm bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700"
+          className="text-sm bg-purple text-white px-3 py-1 rounded hover:bg-purple-800"
         >
           Voltar à Lista
         </Link>
+      </div>
+      <div className="flex flex-col items-center justify-center flex-1 p-6">
+        <h1 className="text-4xl text-purple font-bold text-gray-800">Criar Novo Módulo</h1>
       </div>
 
       <div className="max-w-md mx-auto bg-white shadow rounded-lg p-6">
@@ -97,7 +106,7 @@ export default function CreateModuloPage() {
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Campo: Título */}
           <div className="mb-4">
-            <label htmlFor="Titulo" className="block font-medium mb-1">
+            <label htmlFor="Titulo" className="text-purple-700 block font-medium mb-1">
               Título
             </label>
             <input
@@ -116,7 +125,7 @@ export default function CreateModuloPage() {
 
           {/* Campo: Descrição */}
           <div className="mb-4">
-            <label htmlFor="Descricao" className="block font-medium mb-1">
+            <label htmlFor="Descricao" className="text-purple-700 block font-medium mb-1">
               Descrição
             </label>
             <textarea
@@ -135,22 +144,22 @@ export default function CreateModuloPage() {
 
           {/* Campo: Dificuldade (select) */}
           <div className="mb-6">
-            <label htmlFor="Dificuldade" className="block font-medium mb-1">
+            <label htmlFor="Dificuldade" className="text-purple-700 block font-medium mb-1">
               Nível de Dificuldade
             </label>
             <select
-              id="Dificuldade"
+              id="Dificuldade" 
               {...register("Dificuldade", { valueAsNumber: true })}
-              className={`w-full border rounded px-3 py-2 focus:outline-none ${
+              className={`text-purple-700 w-full border rounded px-3 py-2 focus:outline-none ${
                 formErrors.Dificuldade ? "border-red-500" : "border-gray-300"
               }`}
               disabled={isSubmitting || loading}
             >
               {/*enum no backend*/}
-              <option value={0}>Desconhecido</option>
-              <option value={1}>Fácil</option>
-              <option value={2}>Médio</option>
-              <option value={3}>Difícil</option>
+              <option value={0} className="text-purple-700">Desconhecido</option>
+              <option value={1} className="text-purple-700">Fácil</option>
+              <option value={2} className="text-purple-700">Médio</option>
+              <option value={3} className="text-purple-700">Difícil</option>
             </select>
             {formErrors.Dificuldade && (
               <p className="text-sm text-red-600 mt-1">{formErrors.Dificuldade.message}</p>
@@ -161,7 +170,7 @@ export default function CreateModuloPage() {
           <button
             type="submit"
             disabled={isSubmitting || loading}
-            className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+            className="w-full px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-800 disabled:opacity-50"
           >
             {isSubmitting || loading ? "Criando..." : "Criar Módulo"}
           </button>

@@ -184,13 +184,21 @@ export default function AdminModulosPage() {
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       {/* Cabeçalho com botão “Voltar ao Dashboard” */}
       <div className="max-w-4xl mx-auto flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Gerenciar Módulos</h1>
         <Link
           href="/Pages/AdminDashboard"
-          className="text-sm bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700"
+          className="text-sm bg-purple text-white px-3 py-1 rounded hover:bg-purple-800"
         >
           Voltar ao Dashboard
         </Link>
+        <Link
+          href="/Pages/AdminCriarModulos"
+          className="text-sm bg-purple text-white px-3 py-1 rounded hover:bg-purple-800"
+        >
+          Criar Novo Módulo
+        </Link>
+      </div>
+      <div className="flex flex-col items-center justify-center flex-1 p-6">
+        <h1 className="text-4xl text-purple font-bold text-gray-800">Gerenciar Módulos</h1>
       </div>
 
       {/* Tabela de módulos */}
@@ -201,11 +209,11 @@ export default function AdminModulosPage() {
           <table className="w-full table-auto border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border px-4 py-2 text-left">ID</th>
-                <th className="border px-4 py-2 text-left">Título</th>
-                <th className="border px-4 py-2 text-left">Descrição</th>
-                <th className="border px-4 py-2 text-left">Dificuldade</th>
-                <th className="border px-4 py-2 text-center">Ações</th>
+                <th className="border text-purple-700 px-4 py-2 text-left">ID</th>
+                <th className="border text-purple-700 px-4 py-2 text-left">Título</th>
+                <th className="border text-purple-700 px-4 py-2 text-left">Descrição</th>
+                <th className="border text-purple-700 px-4 py-2 text-left">Dificuldade</th>
+                <th className="border text-purple-700 px-4 py-2 text-center">Ações</th>
               </tr>
             </thead>
             <tbody>
@@ -262,7 +270,7 @@ export default function AdminModulosPage() {
                       <button
                         onClick={handleSubmit(onSubmit)}
                         disabled={isSubmitting}
-                        className="px-3 py-1 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                        className="px-3 py-1 bg-purple-500 text-white rounded hover:bg-purple-800 disabled:opacity-50"
                       >
                         {isSubmitting ? "Salvando..." : "Salvar"}
                       </button>

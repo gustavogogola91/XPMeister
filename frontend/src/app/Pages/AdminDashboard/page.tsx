@@ -81,60 +81,59 @@ export default function AdminDashboardPage() {
   return (
     <div className="min-h-screen bg-gray-50">
       <div className="max-w-4xl mx-auto py-8 px-4">
-        <h1 className="text-2xl font-bold text-gray-800 mb-2">Painel Administrativo</h1>
+        <h1 className="text-4xl text-purple text-center font-bold text-gray-800 mb-2">Painel Administrativo</h1>
         <p className="text-gray-600 mb-6">
-          Seja bem-vindo(a), Administrador! Escolha uma das áreas abaixo para gerenciar:
         </p>
 
         <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6">
-          <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-            <h2 className="text-xl font-semibold mb-4">Módulos</h2>
+          <div className="bg-white p-6 rounded-lg shadow hover:shadow-purple transition">
+            <h2 className="text-2xl text-center text-purple font-semibold mb-4">Módulos</h2>
             <div className="flex flex-col space-y-2">
               <Link
                 href="/Pages/AdminModulos"
-                className="px-4 py-2 bg-green-600 text-white rounded text-center hover:bg-green-700"
+                className="px-4 py-2 bg-purple-500 text-white rounded text-center hover:bg-purple-800"
               >
                 Listar / Editar Módulos
               </Link>
               <Link
                 href="/Pages/AdminCriarModulos"
-                className="px-4 py-2 bg-blue-600 text-white rounded text-center hover:bg-blue-700"
+                className="px-4 py-2 bg-purple-500 text-white rounded text-center hover:bg-purple-800"
               >
                 Criar Novo Módulo
               </Link>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-            <h2 className="text-xl font-semibold mb-4">Aulas</h2>
+          <div className="bg-white p-6 rounded-lg shadow hover:shadow-purple transition">
+            <h2 className="text-2xl text-center text-purple font-semibold mb-4">Aulas</h2>
             <div className="flex flex-col space-y-2">
               <Link
                 href="/Pages/AdminAulas"
-                className="px-4 py-2 bg-green-600 text-white rounded text-center hover:bg-green-700"
+                className="px-4 py-2 bg-purple-500 text-white rounded text-center hover:bg-purple-800"
               >
                 Listar / Editar Aulas
               </Link>
               <Link
                 href="/Pages/AdminCriarAulas/"
-                className="px-4 py-2 bg-blue-600 text-white rounded text-center hover:bg-blue-700"
+                className="px-4 py-2 bg-purple-500 text-white rounded text-center hover:bg-purple-800"
               >
                 Criar Nova Aula
               </Link>
             </div>
           </div>
 
-          <div className="bg-white p-6 rounded-lg shadow hover:shadow-lg transition">
-            <h2 className="text-xl font-semibold mb-4">Desafios</h2>
+          <div className="bg-white p-6 rounded-lg shadow hover:shadow-purple transition">
+            <h2 className="text-2xl text-center text-purple font-semibold mb-4">Desafios</h2>
             <div className="flex flex-col space-y-2">
               <Link
                 href="/Pages/AdminDesafios"
-                className="px-4 py-2 bg-green-600 text-white rounded text-center hover:bg-green-700"
+                className="px-4 py-2 bg-purple-500 text-white rounded text-center hover:bg-purple-800"
               >
                 Listar / Editar Desafios
               </Link>
               <Link
                 href="/Pages/AdminCriarDesafios"
-                className="px-4 py-2 bg-blue-600 text-white rounded text-center hover:bg-blue-700"
+                className="px-4 py-2 bg-purple-500 text-white rounded text-center hover:bg-purple-800"
               >
                 Criar Novo Desafio
               </Link>

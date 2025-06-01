@@ -229,16 +229,24 @@ export default function AdminAulasPage() {
   }
 
   return (
-    <div className="min-h-screen bg-gray-50 py-8 px-4">
+      <div className="min-h-screen bg-gray-50 py-8 px-4">
       {/* Cabeçalho com título e botão “Voltar ao Dashboard” */}
       <div className="max-w-4xl mx-auto flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Gerenciar Aulas</h1>
         <Link
           href="/Pages/AdminDashboard"
-          className="text-sm bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700"
+          className="text-sm bg-purple text-white px-3 py-1 rounded hover:bg-purple-800"
         >
           Voltar ao Dashboard
         </Link>
+        <Link
+          href="/Pages/AdminCriarAulas"
+          className="text-sm bg-purple text-white px-3 py-1 rounded hover:bg-purple-800"
+        >
+          Criar Nova Aula
+        </Link>
+      </div>
+      <div className="flex flex-col items-center justify-center flex-1 p-6">
+        <h1 className="text-4xl text-purple font-bold text-gray-800">Gerenciar Aulas</h1>
       </div>
 
       {/* Filtros de busca */}
@@ -255,7 +263,7 @@ export default function AdminAulasPage() {
         <select
           value={searchModuloId}
           onChange={(e) => setSearchModuloId(Number(e.target.value))}
-          className="w-full sm:w-1/2 border border-gray-300 rounded px-3 py-2 focus:outline-none"
+          className="text-purple w-full sm:w-1/2 border border-gray-300 rounded px-3 py-2 focus:outline-none"
         >
           <option value={0}>Todos os módulos</option>
           {modulos.map((m) => (
@@ -274,7 +282,7 @@ export default function AdminAulasPage() {
             setSearchModuloId(0);
             fetchData();
           }}
-          className="text-sm bg-gray-600 text-white px-3 py-1 rounded hover:bg-gray-700"
+          className="text-sm bg-purple text-white px-3 py-1 rounded hover:bg-purple-800"
         >
           Recarregar Lista
         </button>
@@ -288,9 +296,9 @@ export default function AdminAulasPage() {
           <table className="w-full table-auto border-collapse">
             <thead>
               <tr className="bg-gray-100">
-                <th className="border px-4 py-2 text-left">Módulo</th>
-                <th className="border px-4 py-2 text-left">Nome da Aula</th>
-                <th className="border px-4 py-2 text-left">Seq.</th>
+                <th className="border text-purple px-4 py-2 text-left">Módulo</th>
+                <th className="border text-purple px-4 py-2 text-left">Nome da Aula</th>
+                <th className="border text-purple px-4 py-2 text-left">Seq.</th>
               </tr>
             </thead>
             <tbody>
@@ -310,11 +318,7 @@ export default function AdminAulasPage() {
         )}
       </div>
 
-      {/* ------------------------------------------------------------
-          18) Modal (cortina) de visualização / edição de aula
-          ⚠️ Removemos o fundo preto semitransparente e deixamos o 
-             container “fixed” apenas para posicionar o modal centralizado.
-      ------------------------------------------------------------ */}
+      {/*Janela de edição*/}
       {selectedAula && (
         <div className="fixed inset-0 flex items-center justify-center z-50 pointer-events-none">
           <div
@@ -330,7 +334,7 @@ export default function AdminAulasPage() {
             {/* Botão de fechar (X) */}
             <button
               onClick={closeModal}
-              className="absolute top-3 right-3 text-gray-600 hover:text-gray-800"
+              className="absolute top-3 right-3 text-purple-600 hover:text-purple-900"
             >
               ✕
             </button>
@@ -338,15 +342,15 @@ export default function AdminAulasPage() {
             {/* Conteúdo do modal: modo view ou edit */}
             {modalMode === "view" ? (
               <div className="p-6 space-y-4">
-                <h2 className="text-xl font-semibold">Detalhes da Aula</h2>
+                <h2 className="text-2xl text-purple font-semibold">Detalhes da Aula</h2>
                 <p>
-                  <span className="font-medium">Nome:</span> {selectedAula.nome}
+                  <span className="text-purple-700 font-medium">Nome:</span> {selectedAula.nome}
                 </p>
                 <p>
-                  <span className="font-medium">Descrição:</span> {selectedAula.descricao}
+                  <span className="font-medium text-purple-700">Descrição:</span> {selectedAula.descricao}
                 </p>
                 <p>
-                  <span className="font-medium">Vídeo:</span>{" "}
+                  <span className="font-medium text-purple-700">Vídeo:</span>{" "}
                   <a
                     href={selectedAula.linkVideo}
                     target="_blank"
@@ -357,7 +361,7 @@ export default function AdminAulasPage() {
                   </a>
                 </p>
                 <p>
-                  <span className="font-medium">Arquivo:</span>{" "}
+                  <span className="font-medium text-purple-700">Arquivo:</span>{" "}
                   <a
                     href={selectedAula.linkArquivo}
                     target="_blank"
@@ -368,11 +372,11 @@ export default function AdminAulasPage() {
                   </a>
                 </p>
                 <p>
-                  <span className="font-medium">Número de Sequência:</span>{" "}
+                  <span className="font-medium text-purple-700">Número de Sequência:</span>{" "}
                   {selectedAula.numeroSequencia}
                 </p>
                 <p>
-                  <span className="font-medium">Módulo:</span>{" "}
+                  <span className="font-medium text-purple-700">Módulo:</span>{" "}
                   {selectedAula.modulo.titulo}
                 </p>
 
@@ -404,7 +408,7 @@ export default function AdminAulasPage() {
                 <form onSubmit={handleSubmit(onSubmit)} className="space-y-4">
                   {/* Campo: Nome */}
                   <div>
-                    <label htmlFor="Nome" className="block font-medium mb-1">
+                    <label htmlFor="Nome" className="block font-medium mb-1 text-purple-700">
                       Nome
                     </label>
                     <input
@@ -425,7 +429,7 @@ export default function AdminAulasPage() {
 
                   {/* Campo: Descrição */}
                   <div>
-                    <label htmlFor="Descricao" className="block font-medium mb-1">
+                    <label htmlFor="Descricao" className="block font-medium mb-1 text-purple-700">
                       Descrição
                     </label>
                     <textarea
@@ -446,7 +450,7 @@ export default function AdminAulasPage() {
 
                   {/* Campo: LinkVideo */}
                   <div>
-                    <label htmlFor="LinkVideo" className="block font-medium mb-1">
+                    <label htmlFor="LinkVideo" className="block font-medium mb-1 text-purple-700">
                       Link do Vídeo
                     </label>
                     <input
@@ -467,7 +471,7 @@ export default function AdminAulasPage() {
 
                   {/* Campo: LinkArquivo */}
                   <div>
-                    <label htmlFor="LinkArquivo" className="block font-medium mb-1">
+                    <label htmlFor="LinkArquivo" className="block font-medium mb-1 text-purple-700">
                       Link do Arquivo
                     </label>
                     <input
@@ -488,14 +492,14 @@ export default function AdminAulasPage() {
 
                   {/* Campo: NumeroSequencia */}
                   <div>
-                    <label htmlFor="NumeroSequencia" className="block font-medium mb-1">
+                    <label htmlFor="NumeroSequencia" className="block font-medium mb-1 text-purple-700">
                       Número de Sequência
                     </label>
                     <input
                       type="number"
                       id="NumeroSequencia"
                       {...register("NumeroSequencia", { valueAsNumber: true })}
-                      className={`w-full border rounded px-3 py-2 focus:outline-none ${
+                      className={`text-purple-700 w-full border rounded px-3 py-2 focus:outline-none ${
                         formErrors.NumeroSequencia
                           ? "border-red-500"
                           : "border-gray-300"
@@ -512,13 +516,13 @@ export default function AdminAulasPage() {
 
                   {/* Campo: ModuloId (dropdown) */}
                   <div>
-                    <label htmlFor="ModuloId" className="block font-medium mb-1">
+                    <label htmlFor="ModuloId" className="block font-medium mb-1 text-purple-700">
                       Selecionar Módulo
                     </label>
                     <select
                       id="ModuloId"
                       {...register("ModuloId", { valueAsNumber: true })}
-                      className={`w-full border rounded px-3 py-2 focus:outline-none ${
+                      className={`text-purple-700 w-full border rounded px-3 py-2 focus:outline-none ${
                         formErrors.ModuloId ? "border-red-500" : "border-gray-300"
                       }`}
                       disabled={isSubmitting}
@@ -542,7 +546,7 @@ export default function AdminAulasPage() {
                     <button
                       type="submit"
                       disabled={isSubmitting}
-                      className="px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+                      className="px-4 py-2 bg-purple text-white rounded hover:bg-purple-800 disabled:opacity-50"
                     >
                       {isSubmitting ? "Salvando..." : "Salvar Alterações"}
                     </button>

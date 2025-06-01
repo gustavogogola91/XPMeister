@@ -1,4 +1,3 @@
-// File: frontend/src/app/Pages/AdminCriarAulas/page.tsx
 "use client";
 
 import React, { useEffect, useState } from "react";
@@ -8,9 +7,6 @@ import { useForm } from "react-hook-form";
 import { z } from "zod";
 import { zodResolver } from "@hookform/resolvers/zod";
 
-// ------------------------------------------------------------
-// 1) Schema Zod e tipo CreateAulaDto para validar o formulário
-// ------------------------------------------------------------
 const createAulaSchema = z.object({
   Nome: z.string().min(1, "Informe o nome da aula."),
   Descricao: z.string().min(1, "Informe a descrição da aula."),
@@ -27,17 +23,11 @@ const createAulaSchema = z.object({
 });
 type CreateAulaDto = z.infer<typeof createAulaSchema>;
 
-// ------------------------------------------------------------
-// 2) Tipo para armazenar cada módulo no dropdown
-// ------------------------------------------------------------
 type ModuloOption = {
   id: number;
   titulo: string;
 };
 
-// ------------------------------------------------------------
-// 3) URL base do backend .NET
-// ------------------------------------------------------------
 const BACKEND_URL = "http://localhost:5017";
 
 export default function CreateAulaPage() {
@@ -49,9 +39,6 @@ export default function CreateAulaPage() {
   const [loadingSubmit, setLoadingSubmit] = useState(false);
   const [submitError, setSubmitError] = useState<string | null>(null);
 
-  // ------------------------------------------------------------
-  // 4) Configurando React Hook Form com Zod
-  // ------------------------------------------------------------
   const {
     register,
     handleSubmit,
@@ -68,9 +55,6 @@ export default function CreateAulaPage() {
     },
   });
 
-  // ------------------------------------------------------------
-  // 5) Função para buscar os módulos e popular <select>
-  // ------------------------------------------------------------
   const fetchModulos = async () => {
     setLoadingModulos(true);
     setModulosError(null);
@@ -78,7 +62,6 @@ export default function CreateAulaPage() {
     try {
       const res = await fetch(`${BACKEND_URL}/modulo`);
       if (res.status === 404) {
-        // Nenhum módulo cadastrado: lista vazia
         setModulos([]);
         setLoadingModulos(false);
         return;
@@ -86,7 +69,6 @@ export default function CreateAulaPage() {
       if (!res.ok) {
         throw new Error(`Erro ${res.status}: não foi possível obter módulos.`);
       }
-      // GET /modulo retorna array de ModuloDTO { id, titulo, descricao, ... }
       const data: Array<{ id: number; titulo: string }> = await res.json();
       setModulos(data.map((m) => ({ id: m.id, titulo: m.titulo })));
       setLoadingModulos(false);
@@ -96,16 +78,10 @@ export default function CreateAulaPage() {
     }
   };
 
-  // ------------------------------------------------------------
-  // 6) Carrega módulos assim que o componente monta
-  // ------------------------------------------------------------
   useEffect(() => {
     fetchModulos();
   }, []);
 
-  // ------------------------------------------------------------
-  // 7) Função onSubmit: faz POST /aula
-  // ------------------------------------------------------------
   const onSubmit = async (data: CreateAulaDto) => {
     setSubmitError(null);
     setLoadingSubmit(true);
@@ -129,7 +105,6 @@ export default function CreateAulaPage() {
         throw new Error(`Erro ${response.status}: ${texto || "não foi possível criar aula."}`);
       }
 
-      // Em caso de sucesso, redireciona para a listagem de aulas
       router.push("/Pages/AdminAulas");
     } catch (err: any) {
       setSubmitError(err.message || "Erro ao criar aula.");
@@ -138,9 +113,6 @@ export default function CreateAulaPage() {
     }
   };
 
-  // ------------------------------------------------------------
-  // 8) JSX de loading/erro ao buscar módulos
-  // ------------------------------------------------------------
   if (loadingModulos) {
     return (
       <div className="flex items-center justify-center h-screen bg-gray-100">
@@ -163,20 +135,25 @@ export default function CreateAulaPage() {
     );
   }
 
-  // ------------------------------------------------------------
-  // 9) JSX final: formulário de criação de aula
-  // ------------------------------------------------------------
   return (
     <div className="min-h-screen bg-gray-50 py-8 px-4">
       {/* Cabeçalho com título e botão “Voltar à Lista de Aulas” */}
       <div className="max-w-4xl mx-auto flex items-center justify-between mb-6">
-        <h1 className="text-2xl font-bold text-gray-800">Criar Nova Aula</h1>
+        <Link
+          href="/Pages/AdminDashboard"
+          className="text-sm bg-purple text-white px-3 py-1 rounded hover:bg-purple-800"
+        >
+          Voltar ao Dashboard
+        </Link>
         <Link
           href="/Pages/AdminAulas"
-          className="text-sm bg-indigo-600 text-white px-3 py-1 rounded hover:bg-indigo-700"
+          className="text-sm bg-purple-500 text-white px-3 py-1 rounded hover:bg-purple-800"
         >
           Voltar à Lista de Aulas
         </Link>
+      </div>
+      <div className="flex flex-col items-center justify-center flex-1 p-6">
+        <h1 className="text-4xl text-purple font-bold text-gray-800">Criar Nova Aula</h1>
       </div>
 
       <div className="max-w-xl mx-auto bg-white shadow rounded-lg p-6">
@@ -190,7 +167,7 @@ export default function CreateAulaPage() {
         <form onSubmit={handleSubmit(onSubmit)}>
           {/* Campo: Nome */}
           <div className="mb-4">
-            <label htmlFor="Nome" className="block font-medium mb-1">
+            <label htmlFor="Nome" className="text-purple-700 block font-medium mb-1">
               Nome
             </label>
             <input
@@ -209,7 +186,7 @@ export default function CreateAulaPage() {
 
           {/* Campo: Descrição */}
           <div className="mb-4">
-            <label htmlFor="Descricao" className="block font-medium mb-1">
+            <label htmlFor="Descricao" className="text-purple-700 block font-medium mb-1">
               Descrição
             </label>
             <textarea
@@ -228,7 +205,7 @@ export default function CreateAulaPage() {
 
           {/* Campo: LinkVideo */}
           <div className="mb-4">
-            <label htmlFor="LinkVideo" className="block font-medium mb-1">
+            <label htmlFor="LinkVideo" className="text-purple-700 block font-medium mb-1">
               Link do Vídeo
             </label>
             <input
@@ -248,7 +225,7 @@ export default function CreateAulaPage() {
 
           {/* Campo: LinkArquivo */}
           <div className="mb-4">
-            <label htmlFor="LinkArquivo" className="block font-medium mb-1">
+            <label htmlFor="LinkArquivo" className="text-purple-700 block font-medium mb-1">
               Link do Arquivo
             </label>
             <input
@@ -268,14 +245,14 @@ export default function CreateAulaPage() {
 
           {/* Campo: NumeroSequencia */}
           <div className="mb-4">
-            <label htmlFor="NumeroSequencia" className="block font-medium mb-1">
+            <label htmlFor="NumeroSequencia" className="text-purple-700 block font-medium mb-1">
               Número de Sequência
             </label>
             <input
               type="number"
               id="NumeroSequencia"
               {...register("NumeroSequencia", { valueAsNumber: true })}
-              className={`w-full border rounded px-3 py-2 focus:outline-none ${
+              className={`text-purple-700 w-full border rounded px-3 py-2 focus:outline-none ${
                 formErrors.NumeroSequencia ? "border-red-500" : "border-gray-300"
               }`}
               min={1}
@@ -288,13 +265,13 @@ export default function CreateAulaPage() {
 
           {/* Campo: ModuloId (dropdown) */}
           <div className="mb-6">
-            <label htmlFor="ModuloId" className="block font-medium mb-1">
+            <label htmlFor="ModuloId" className="text-purple-700 block font-medium mb-1">
               Selecionar Módulo
             </label>
             <select
               id="ModuloId"
               {...register("ModuloId", { valueAsNumber: true })}
-              className={`w-full border rounded px-3 py-2 focus:outline-none ${
+              className={`text-purple-700 w-full border rounded px-3 py-2 focus:outline-none ${
                 formErrors.ModuloId ? "border-red-500" : "border-gray-300"
               }`}
               disabled={isSubmitting || loadingSubmit}
@@ -315,7 +292,7 @@ export default function CreateAulaPage() {
           <button
             type="submit"
             disabled={isSubmitting || loadingSubmit}
-            className="w-full px-4 py-2 bg-green-600 text-white rounded hover:bg-green-700 disabled:opacity-50"
+            className="w-full px-4 py-2 bg-purple-500 text-white rounded hover:bg-purple-800 disabled:opacity-50"
           >
             {isSubmitting || loadingSubmit ? "Criando..." : "Criar Aula"}
           </button>
