@@ -115,7 +115,11 @@ const ModulosPage = () => {
                     >{Cards.map((card) => (
                         <div
                             key={card.id}
-                            className='module-card module-card-completed'>
+                            className='module-card module-card-completed cursor-pointer'
+                            onClick={() => {
+                                router.push(`/Pages/AulasPage?moduloId=${card.id}`)
+                            }}
+                            >
                             <h2>{card.titulo}</h2>
                             <div className='module-card-icon'>
                                 <img src="/DifficultyIcon.png" alt="DifficultyIcon" />
@@ -126,16 +130,7 @@ const ModulosPage = () => {
                             </div>
                         </div>
                     ))}
-                        <div className='module-card module-card-completed'>
-                            <h2>Introdução às metodologias ágeis</h2>
-                            <div className='module-card-icon'>
-                                <img src="/DifficultyIcon.png" alt="DifficultyIcon" />
-                                <p>Iniciante</p>
-                            </div>
-                            <div className='module-card-status completed'>
-                                <p>Concluído</p>
-                            </div>
-                        </div>
+                        
 
                     </div>
                 </div>
