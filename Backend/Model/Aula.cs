@@ -9,9 +9,10 @@ namespace Backend.Model
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; private set; }
         [Required(ErrorMessage = "IdModulo é obrigatório")]
-        public int IdModulo { get; set; }
+        public int ModuloId { get; set; }
         [Required(ErrorMessage = "Número da Sequência é obrigatório")]
-        public int NumeroSequencia { get; set; } 
+        public Modulo? Modulo { get; set; }
+        public int NumeroSequencia { get; set; }
         [Required(ErrorMessage = "Nome é obrigatório")]
         public string? Nome { get; set; }
         [Required(ErrorMessage = "Descrição é obrigatório")]
