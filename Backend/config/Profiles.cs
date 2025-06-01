@@ -21,6 +21,7 @@ namespace Backend.config
 
             CreateMap<Modulo, ModuloDTO>();
             CreateMap<ModuloPostDTO, Modulo>();
+
         }
     }
 }

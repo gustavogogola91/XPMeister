@@ -9,7 +9,7 @@ namespace Backend.Controller
 
     [ApiController]
     [Route("modulo")]
-    [Authorize]
+    // [Authorize]
     public class ModuloController : ControllerBase
     {
         private readonly AppDbContext _database;
