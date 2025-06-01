@@ -214,13 +214,13 @@ function Forum() {
 
   const { "auth-token": AuthToken } = parseCookies();
 
-  // useEffect(() => {
-  //   if (typeof window !== "undefined") {
-  //     if (!AuthToken) {
-  //       router.push("/Pages/LoginPage");
-  //     }
-  //   }
-  // }, [router]);
+  useEffect(() => {
+    if (typeof window !== "undefined") {
+      if (!AuthToken) {
+        router.push("/Pages/LoginPage");
+      }
+    }
+  }, [router]);
 
   useEffect(() => {
     buscarPosts();
