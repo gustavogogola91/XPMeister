@@ -1,17 +1,18 @@
 "use client";
 
-import { useRouter } from "next/navigation";
+import { useRouter, useSearchParams } from "next/navigation";
 import { parseCookies } from "nookies";
 import { useState, useEffect } from "react";
 
 var apiUrl = "http://localhost:5017"
-var idModulo = 1; // localStorage.getItem("IdModulo") <- alterar quando implementar 100%
 
 export default function DesafiosPage() {
-
-    const router = useRouter();
     
+    const router = useRouter();
+    const searchParams = useSearchParams();
+
     const { 'auth-token': AuthToken } = parseCookies();
+    const idModulo = searchParams.get('idModulo') || '1';
 
     useEffect(() => {
         if (typeof window !== 'undefined') {
@@ -24,13 +25,13 @@ export default function DesafiosPage() {
 
     return (
       <div className="flex flex-col my-10 md:my-0 md:flex-row items-center justify-between">
-        <DesafiosAside />
-        <DesafiosMain />
+        <DesafiosAside idModulo={idModulo}/>
+        <DesafiosMain idModulo={idModulo}/>
       </div>
     );
   }
 
-function DesafiosAside() {
+function DesafiosAside({ idModulo }:{ idModulo: string }) {
     const router = useRouter();
 
     return (
@@ -42,8 +43,8 @@ function DesafiosAside() {
                 <li className="px-2 py-1 hover:bg-gray-100 rounded">Aula 2 – Desenvolvimento</li>
                 <li className="px-2 py-1 hover:bg-gray-100 rounded">Aula 3 – Conclusão</li>
                 <li className="text-purple-600 font-semibold px-2 py-1 bg-gray-200 rounded border-1 border-purple-600 cursor-pointer"
-                    onClick={() => router.push("/Pages/DesafiosPage")}
-                >DESAFIO –<span className="text-black"> Perguntas e Respostas</span>
+                    onClick={() => router.push(`/Pages/DesafiosPage?idModulo=${idModulo}`)}
+                    >DESAFIO –<span className="text-black"> Perguntas e Respostas</span>
                 </li>
             </ul>
         </aside>
@@ -51,7 +52,7 @@ function DesafiosAside() {
     );
 }
 
-function DesafiosMain() {
+function DesafiosMain({ idModulo }:{ idModulo: string }) {
     const [desafios, setDesafios] = useState<any[]>([]);
     const [loading, setLoading] = useState(true);
     const [selecionadas, setSelecionadas] = useState<{ [desafioId: number]: number | null }>({});
