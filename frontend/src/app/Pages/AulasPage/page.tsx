@@ -272,8 +272,9 @@ const AulasPage = () => {
               Aula {index + 1} – {aula.nome}
             </li>
           ))}
-          <li className="text-purple-600 font-semibold px-2 py-1 hover:bg-gray-100 rounded cursor-pointer">
-            DESAFIO – <span className="text-black">CRIE UM PROJETO</span>
+          <li className="text-purple-600 font-semibold px-2 py-1 bg-gray-200 rounded border-1 border-purple-600 cursor-pointer"
+              onClick={() => router.push(`/Pages/DesafiosPage?idModulo=${moduloId}`)}
+              >DESAFIO –<span className="text-black"> Perguntas e Respostas</span>
           </li>
         </ul>
       </aside>
