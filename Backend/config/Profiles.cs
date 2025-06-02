@@ -29,6 +29,7 @@ namespace Backend.config
 
             CreateMap<Postagem, PostagemDTO>().ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.DataCriacao.Add(new TimeSpan(0, -3, 0, 0)).ToString("dd/MM/yyyy HH:mm:ss")));
             CreateMap<PostagemPostDTO, Postagem>();
+
         }
     }
 }

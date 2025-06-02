@@ -124,6 +124,28 @@ namespace Backend.Controller
             }
         }
 
+        [HttpGet("modulo/{id}")]
+        public async Task<ActionResult<IEnumerable<Aula>>> GetAulaByModulo(int id)
+        {
+            try
+            {
+                var aulas = await _appDbContext.tb_aula.Where(a => a.ModuloId == id).ToListAsync();
+
+                if (aulas == null || !aulas.Any())
+                {
+                    return NotFound("Nenhuma aula foi encontrada");
+                }
+
+                var aulasDto = _mapper.Map<List<AulaCompletaDTO>>(aulas);
+
+                return Ok(aulasDto);
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
         [HttpPut("{id}")]
         public async Task<IActionResult> UpdateAula(int id, [FromBody] AulaPutDTO aula)
         {

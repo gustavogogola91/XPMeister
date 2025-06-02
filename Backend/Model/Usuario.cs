@@ -13,6 +13,8 @@ namespace Backend.Model
         public string? Senha { get; set; }
         public Roles Role { get; private set; }
         public bool Ativo { get; set; }
+        public List<int> modulosCompletos { get; set; } = new List<int>();
+        public int? moduloFazendo { get; set; }
         public TempoDeEstudo? Estudo { get; set; }
 
     }
