@@ -15,9 +15,12 @@ namespace Backend.Data
 
         public DbSet<Desafio> tb_desafios { get; set; }
 
+        public DbSet<TempoDeEstudo> tb_tempoEstudo { get; set; }
+
         public DbSet<Postagem> tb_postagem { get; set; }
 
         public DbSet<Comentario> tb_comentario { get; set; }
+
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

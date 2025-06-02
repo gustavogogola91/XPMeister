@@ -149,13 +149,14 @@ namespace Backend.Controller
         {
             try
             {
-                var usuario = await _appDbContext.tb_usuario.FindAsync(id);
+            var usuario = await _appDbContext.tb_usuario
+                .Include(u => u.estudo)
+                .FirstOrDefaultAsync(u => u.Id == id);
 
-                if (usuario == null)
-                {
-                    return NotFound("Usuário não encontrado");
-                }
-
+            if (usuario == null)
+            {
+                return NotFound("Usuário não encontrado");
+            }
                 var usuarioDto = _mapper.Map<UsuarioDTO>(usuario);
                 return Ok(usuarioDto);
             }
@@ -249,6 +250,41 @@ namespace Backend.Controller
                 _appDbContext.tb_usuario.Remove(usuario);
                 await _appDbContext.SaveChangesAsync();
                 return Ok("Deletado com successo");
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+        }
+
+        [HttpPut("tempo/{id}")]
+        public async Task<IActionResult> UpdateTempoUsuario(int id, [FromBody] TempoDeEstudo tempoEstudo)
+        {
+            if (tempoEstudo == null)
+            {
+                return BadRequest("Informacoes faltando!");
+            }
+            try
+            {
+                var tempoExistente = await _appDbContext.tb_tempoEstudo.FindAsync(id);
+                if (tempoExistente == null)
+                {
+                    return NotFound("Tempo de estudo não encontrado!");
+                }
+
+                tempoExistente.Segunda = tempoEstudo.Segunda;
+                tempoExistente.Terca = tempoEstudo.Terca;
+                tempoExistente.Quarta = tempoEstudo.Quarta;
+                tempoExistente.Quinta = tempoEstudo.Quinta;
+                tempoExistente.Sexta = tempoEstudo.Sexta;
+                tempoExistente.Sabado = tempoEstudo.Sabado;
+                tempoExistente.Domingo = tempoEstudo.Domingo;
+                tempoExistente.horasDiarias = tempoEstudo.horasDiarias;
+
+                _appDbContext.tb_tempoEstudo.Update(tempoExistente);
+                await _appDbContext.SaveChangesAsync();
+
+                return Ok(tempoExistente);
             }
             catch (Exception ex)
             {

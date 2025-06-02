@@ -141,30 +141,41 @@ export default function AlunoConfigPage() {
   }
 
   async function alterarEstudo() {
-    var horas = (document.getElementById("horas") as HTMLInputElement).value;
-    try {
-      const response = await fetch(`${apiUrl}/usuario/1`, {
-        method: "PUT",
-        headers: { "Content-Type": "application/json" },
-          body: JSON.stringify({
-            tempoDeEstudo: {
-              segunda: diasSelecionados.segunda,
-              terca: diasSelecionados.terca,
-              quarta: diasSelecionados.quarta,
-              quinta: diasSelecionados.quinta,
-              sexta: diasSelecionados.sexta,
-              sabado: diasSelecionados.sabado,
-              domingo: diasSelecionados.domingo,
-              horasDiarias: horas
-            }
-          }),
-      });
+  const userId = 1; // Troque para o id do usuário logado, se necessário
+  var horas = (document.getElementById("horas") as HTMLInputElement).value;
 
-      console.log(response)
-    } catch (error) {
-      return null;
+  try {
+    const tempoRes = await fetch(`${apiUrl}/usuario/${userId}`);
+    if (!tempoRes.ok) {
+      throw new Error("Tempo de estudo não encontrado para o usuário.");
     }
+    const tempo = await tempoRes.json();
+    console.log(tempo);
+    const response = await fetch(`${apiUrl}/usuario/tempo/${tempo.estudo.id}`, {
+      method: "PUT",
+      headers: { "Content-Type": "application/json" },
+      body: JSON.stringify({
+        segunda: diasSelecionados.segunda,
+        terca: diasSelecionados.terca,
+        quarta: diasSelecionados.quarta,
+        quinta: diasSelecionados.quinta,
+        sexta: diasSelecionados.sexta,
+        sabado: diasSelecionados.sabado,
+        domingo: diasSelecionados.domingo,
+        horasDiarias: horas,
+      }),
+    });
+
+    if (response.ok) {
+      alert("Tempo de estudo atualizado com sucesso!");
+    } else {
+      alert("Erro ao atualizar tempo de estudo.");
+    }
+  } catch (error) {
+    alert("Erro ao buscar ou atualizar tempo de estudo.");
   }
+  }
+
 
   async function alterarEmail() {
     const errorLayout = document.getElementById("Erro");
