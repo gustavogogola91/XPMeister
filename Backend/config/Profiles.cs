@@ -1,5 +1,6 @@
 using AutoMapper;
 using Backend.Model;
+using Backend.Model.DTO.Forum;
 
 namespace Backend.config
 {
@@ -17,10 +18,17 @@ namespace Backend.config
 
             CreateMap<Usuario, UsuarioJwtDTO>();
             CreateMap<Usuario, UsuarioDTO>();
+            CreateMap<Usuario, UsuarioComentarioDTO>();
             CreateMap<UsuarioPostDTO, Usuario>();
 
             CreateMap<Modulo, ModuloDTO>();
             CreateMap<ModuloPostDTO, Modulo>();
+
+            CreateMap<Comentario, ComentarioDTO>().ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.DataCriacao.Add(new TimeSpan(0, -3, 0, 0)).ToString("dd/MM/yyyy HH:mm:ss")));
+            CreateMap<ComentarioPostDTO, Comentario>();
+
+            CreateMap<Postagem, PostagemDTO>().ForMember(dest => dest.DataCriacao, opt => opt.MapFrom(src => src.DataCriacao.Add(new TimeSpan(0, -3, 0, 0)).ToString("dd/MM/yyyy HH:mm:ss")));
+            CreateMap<PostagemPostDTO, Postagem>();
         }
     }
 }

@@ -1,8 +1,7 @@
 "use client"
 
-import { createContext, ReactNode, useEffect, useState, useContext } from "react";
+import { createContext, ReactNode, useEffect, useState } from "react";
 import { destroyCookie, parseCookies, setCookie } from "nookies";
-
 
 const apiUrl = "http://localhost:5017"
 
@@ -100,12 +99,4 @@ export function AuthProvider({ children }: { children: ReactNode }) {
         </AuthContext.Provider>
     )
 
-}
-
-export function useAuth() {
-  const context = useContext(AuthContext);
-  if (!context) {
-    throw new Error("useAuth must be used within an AuthProvider");
-  }
-  return context;
 }

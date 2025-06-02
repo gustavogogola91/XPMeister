@@ -114,7 +114,7 @@ export default function AdminDashboardPage() {
                 Listar / Editar Aulas
               </Link>
               <Link
-                href="/Pages/AdminCriarAulas/"
+                href="/Pages/AdminCriarAulas"
                 className="px-4 py-2 bg-purple-500 text-white rounded text-center hover:bg-purple-800"
               >
                 Criar Nova Aula
