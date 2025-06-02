@@ -14,6 +14,7 @@ namespace Backend.Data
         public DbSet<Modulo> tb_modulo { get; set; }
 
         public DbSet<Desafio> tb_desafios { get; set; }
+        public DbSet<Alternativa> tb_alternativa { get; set; }
 
         public DbSet<Postagem> tb_postagem { get; set; }
 

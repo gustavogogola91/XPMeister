@@ -27,7 +27,18 @@ namespace Backend.Controller
 
             try
             {
+                // Mapeia o DTO para a entidade Desafio
                 var desafio = _mapper.Map<Desafio>(dto);
+
+                // Garante que as alternativas estejam associadas ao desafio
+                if (dto.Alternativas != null && dto.Alternativas.Any())
+                {
+                    desafio.Alternativas = dto.Alternativas.Select(a => new Alternativa
+                    {
+                        Texto = a.Texto,
+                        Correta = a.Correta
+                    }).ToList();
+                }
 
                 await _database.tb_desafios.AddAsync(desafio);
                 await _database.SaveChangesAsync();
@@ -46,7 +57,11 @@ namespace Backend.Controller
         public async Task<IActionResult> BuscarDesafios()
         {
             try {
-                var desafios = await _database.tb_desafios.Include(d => d.Modulo).ThenInclude(m => m.Aulas).Include(d => d.Usuario).ToListAsync();
+                var desafios = await _database.tb_desafios
+                    .Include(d => d.Modulo)
+                        .ThenInclude(m => m.Aulas)
+                    .Include(d => d.Alternativas) 
+                    .ToListAsync();
                 
                 if(desafios == null || !desafios.Any()) {
                     return NotFound("Não existem desafios cadastrados");
@@ -69,7 +84,7 @@ namespace Backend.Controller
             }
 
             try {
-                var desafio = await _database.tb_desafios.Include(d => d.Modulo).Include(d => d.Usuario).FirstOrDefaultAsync(d => d.Id == id);
+                var desafio = await _database.tb_desafios.Include(d => d.Modulo).FirstOrDefaultAsync(d => d.Id == id);
                 if (desafio == null)
                 {
                     return NotFound($"Desafio com ID {id} não encontrado.");
@@ -80,6 +95,33 @@ namespace Backend.Controller
 
             } catch (Exception ex) {
                 return StatusCode(500, new { erro = "Erro ao buscar desafio no banco", detalhe = ex.Message });
+            }
+        }
+
+        [HttpGet("buscar-desafios-modulo/{idModulo}")]
+        public async Task<IActionResult> BuscarDesafioM(int idModulo)
+        {
+            if (idModulo <= 0)
+                {
+                    return BadRequest("ID do módulo inválido!");
+                }
+
+            try {
+                var desafios = await _database.tb_desafios
+                    .Where(d => d.ModuloId == idModulo && d.Ativo)
+                    .Include(d => d.Alternativas)
+                    .ToListAsync();
+
+                if (desafios == null || !desafios.Any())
+                {
+                    return NotFound($"Não existem desafios cadastrados para o módulo com ID {idModulo}.");
+                }
+
+                var desafiosDto = _mapper.Map<List<DesafioDTO>>(desafios);
+                return Ok(desafiosDto);
+
+            } catch (Exception ex) {
+                return StatusCode(500, new { erro = "Erro ao buscar desafios por módulo", detalhe = ex.Message });
             }
         }
 
@@ -97,15 +139,10 @@ namespace Backend.Controller
                 if (desafioOld == null)
                     return NotFound($"Desafio com ID {id} não encontrado.");
 
-                var usuarioExiste = await _database.tb_usuario.AnyAsync(u => u.Id == dto.UsuarioId);
-                if (!usuarioExiste)
-                    return BadRequest("Usuário informado não existe.");
-
                 desafioOld.Titulo           = dto.Titulo!;
                 desafioOld.Descricao        = dto.Descricao!;
                 desafioOld.NivelDificuldade = dto.NivelDificuldade;
                 desafioOld.PontuacaoMaxima  = dto.PontuacaoMaxima;
-                desafioOld.UsuarioId        = dto.UsuarioId;
                 desafioOld.ModuloId         = dto.ModuloId;
 
                 _database.tb_desafios.Update(desafioOld);

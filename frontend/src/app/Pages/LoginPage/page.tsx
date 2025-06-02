@@ -88,6 +88,7 @@ function FormLogin() {
             console.log(localStorage.getItem('AuthToken'));
 
             router.push('/Pages/ModulosPage');
+
         } else {
             alert("Email ou senha inválidos!");
         }
