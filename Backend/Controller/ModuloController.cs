@@ -1,13 +1,15 @@
 using AutoMapper;
 using Backend.Data;
 using Backend.Model;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
-
 namespace Backend.Controller
 {
+
     [ApiController]
     [Route("modulo")]
+    // [Authorize]
     public class ModuloController : ControllerBase
     {
         private readonly AppDbContext _database;
@@ -18,6 +20,7 @@ namespace Backend.Controller
             _database = database;
             _mapper = mapper;
         }
+
 
         [HttpGet]
         public async Task<ActionResult<IEnumerable<ModuloDTO>>> GetModulos()

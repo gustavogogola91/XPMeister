@@ -1,6 +1,7 @@
 "use client"
 
 import { useRouter } from 'next/navigation';
+import { BadgeCheck } from "lucide-react";
 
 export default function LandingPage(){
     const router = useRouter();
@@ -30,11 +31,7 @@ export default function LandingPage(){
                     <p>Projetos Práticos</p>
                 </div>
                 <div className="card-landing-page">
-                    <img 
-                    src="/DollarIcon.png"
-                    alt="Descrição da imagem" 
-                    className=""
-                    />
+                    <BadgeCheck size={80} color='#AF52DE'/>
                     <p>Nenhum custo inicial</p>
                 </div>
             </div>

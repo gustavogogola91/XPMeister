@@ -2,7 +2,7 @@
 
 import { useRouter } from 'next/navigation';
 import { parseCookies } from "nookies";
-import { SetStateAction, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const apiUrl = "http://localhost:5017"
 interface ModuleCard {
@@ -40,6 +40,8 @@ const ModulosPage = () => {
     }, [router]);
 
     useEffect(() => {
+
+
         const fetchCards = async () => {
             setLoading(true);
             setError(null);
@@ -47,12 +49,13 @@ const ModulosPage = () => {
             try {
                 const response = await fetch(`${apiUrl}/modulo`, {
                     method: "GET",
-                    // headers: {
-                    //   'Authorization': 'Bearer YOUR_TOKEN',
-                    // },
+                    headers: {
+                        'Authorization': `Bearer ${AuthToken}`,
+                    },
                 });
 
-                if (!response.ok) {
+                if (response.status === 401) {
+                    router.push("LoginPage");
                     throw new Error(`HTTP error! status: ${response.status}`);
                 }
 
@@ -67,14 +70,16 @@ const ModulosPage = () => {
             }
         }
 
+         {//TODO: Filtrar cartas que aparecem
+        }
         fetchCards()
     }, [apiUrl]);
 
     return (
-        <div className='mt-6 flex flex-col md:flex-row md:items-baseline items-center justify-evenly md:justify-normal md:mb-8'>
-            <div className='w-1/4'>
-                <h1 className='text-[36px] text-purple text-center font-bold'>FILTRAR</h1>
-                <ul className="menu-container">
+        <div className='mt-6 md:my-20 md:mx-10 flex flex-col md:flex-row md:items-baseline items-center justify-evenly md:justify-center md:gap-35'>
+            <div className='w-[300px]'>
+                <h1 className='text-[34px] text-purple text-center font-bold  md:mb-8'>FILTRAR</h1>
+                <ul className="menu-container p-10 border-[1px] border-gray-100 rounded shadow">
                     <li
                         className={`menu-item ${selectedFilterItem === 'À Fazer' ? 'selected' : ''}`}
                         onClick={() => handleFilterItemClick('À Fazer')}
@@ -94,10 +99,13 @@ const ModulosPage = () => {
                         Concluído
                     </li>
                 </ul>
-                <div className="hidden inset-x-0 h-px bg-gray-300 top-1/2 -translate-y-1/2 z-0"></div>
             </div>
-            <div className='w-3/4'>
-                <h1 className='text-[36px] text-purple text-center font-bold md:mb-6'>MÓDULOS</h1>
+            {/* <div className="border-b-2 border-gray-400 w-1/2"></div> */}
+
+            {//TODO: Responsividade tela módulos
+            }
+            <div className=''>
+                <h1 className='text-[34px] text-purple text-center font-bold md:mb-8'>MÓDULOS</h1>
                 <div className=''>
                     <div
                         className='grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 place-items-center md:w-full gap-4 max-h-[700px] overflow-y-auto overflow-x-hidden
@@ -107,7 +115,11 @@ const ModulosPage = () => {
                     >{Cards.map((card) => (
                         <div
                             key={card.id}
-                            className='module-card module-card-completed'>
+                            className='module-card module-card-completed cursor-pointer'
+                            onClick={() => {
+                                router.push(`/Pages/AulasPage?moduloId=${card.id}`)
+                            }}
+                            >
                             <h2>{card.titulo}</h2>
                             <div className='module-card-icon'>
                                 <img src="/DifficultyIcon.png" alt="DifficultyIcon" />
@@ -118,16 +130,7 @@ const ModulosPage = () => {
                             </div>
                         </div>
                     ))}
-                        <div className='module-card module-card-completed'>
-                            <h2>Introdução às metodologias ágeis</h2>
-                            <div className='module-card-icon'>
-                                <img src="/DifficultyIcon.png" alt="DifficultyIcon" />
-                                <p>Iniciante</p>
-                            </div>
-                            <div className='module-card-status completed'>
-                                <p>Concluído</p>
-                            </div>
-                        </div>
+                        
 
                     </div>
                 </div>

@@ -4,6 +4,7 @@ using Backend.Data;
 using Backend.Model;
 using Backend.Services;
 using AutoMapper;
+using Microsoft.AspNetCore.Authorization;
 
 namespace Backend.Controller
 {
@@ -48,6 +49,56 @@ namespace Backend.Controller
             {
                 return StatusCode(500, ex);
             }
+        }
+
+        [HttpGet("token")]
+        [Authorize]
+        public IActionResult CheckTokenValidity()
+        {
+            return Ok(new { valid = true });
+        }
+
+        [HttpPut("modulo/{id}")]
+        public async Task<IActionResult> UpdateModuloUsuario(int id, [FromBody] UsuarioModuloUpdateDTO usuarioMod)
+        {
+            try
+            {
+                var usuario = await _appDbContext.tb_usuario.FirstOrDefaultAsync(u => u.Id == id);
+                if (usuario == null)
+                {
+                    return StatusCode(404);
+                }
+
+                if (usuario.moduloFazendo.HasValue)
+                {
+                    if (usuario.moduloFazendo == usuarioMod.moduloFeito)
+                    {
+                        return StatusCode(500); //trocar codes
+                    }
+
+                    if (usuario.modulosCompletos.Contains(usuarioMod.moduloFeito))
+                    {
+                        return StatusCode(402); //trocar codes
+                    }
+
+                    usuario.modulosCompletos.Add(usuario.moduloFazendo.Value);
+                    usuario.moduloFazendo = usuarioMod.moduloFeito;
+                }
+                else
+                {
+                    usuario.moduloFazendo = usuarioMod.moduloFeito;
+                }
+
+                _appDbContext.tb_usuario.Update(usuario);
+                await _appDbContext.SaveChangesAsync();
+
+                return Ok();
+            }
+            catch (Exception ex)
+            {
+                return StatusCode(500, ex);
+            }
+
         }
 
         [HttpPost("login")]
