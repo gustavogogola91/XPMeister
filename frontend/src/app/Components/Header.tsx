@@ -48,6 +48,7 @@ const AuthenticatedHeader = () => {
                     <ul className="mt-4 flex flex-col justify-center font-semibold absolute right-24 top-32 md:right-36 md:top-12 bg-white gap-2 text-black rounded border-b-5 border-purple shadow-xl py-4 px-4 space-y-2 z-50 transition-all duration-1300 ease-out">
                         <li><Link href={"ModulosPage"}>Módulos</Link></li>
                         <li><Link href={"AulasPage"}>Aula</Link></li>
+                        <li><Link href={"Forum"}>Fórum</Link></li>
                         <li><Link href={"AlunoConfigPage"}>Configurações</Link></li>
                         <button onClick={handleUserLogout} className="cursor-pointer m-auto bg-red-500 w-full m-2 text-white font-bold rounded">Logout</button>
                     </ul>
