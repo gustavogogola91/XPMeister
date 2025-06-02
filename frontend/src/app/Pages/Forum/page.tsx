@@ -98,17 +98,19 @@ const ModalNovo = ({ onClose, onUpdate }: { onClose: any; onUpdate: any }) => {
   );
 };
 
+interface ModalPostagemProps {
+  post: Post | null;
+  onClose: () => void;
+  onAdd: () => Promise<Post[] | undefined>;
+  onUpdate: (updatedPost: Post | null) => void;
+}
+
 const ModalPostagem = ({
   post,
   onClose,
   onAdd,
   onUpdate,
-}: {
-  post: Post | null;
-  onClose: any;
-  onAdd: any;
-  onUpdate: any;
-}) => {
+}: ModalPostagemProps) => {
   if (!post) return null;
 
   const comentInput = useRef<HTMLInputElement>(null);
@@ -130,11 +132,19 @@ const ModalPostagem = ({
         }),
       });
       if (res.ok) {
-        await onAdd();
+        const postsAtualizados = await onAdd();
         if (comentInput.current) {
           comentInput.current.value = "";
         }
-        await onUpdate();
+
+        if (postsAtualizados) {
+          const postAbertoAtualizado = postsAtualizados.find(
+            (p) => p.id == postagemId
+          );
+          if (postAbertoAtualizado) {
+            onUpdate(postAbertoAtualizado);
+          }
+        }
       }
     } catch (erro) {
       console.error("Erro ao adicionar comentario", erro);
@@ -150,7 +160,7 @@ const ModalPostagem = ({
         <h2 className="text-2xl font-bold mb-4 text-purple-700 uppercase">
           {post.titulo}
         </h2>
-        <p>{post.conteudo}</p>
+        <p className="w-full break-words">{post.conteudo}</p>
         <p className="text-gray-700 mb-2">
           <strong>Autor:</strong> {post.autor.nome}
         </p>
@@ -226,20 +236,25 @@ function Forum() {
     buscarPosts();
   }, []);
 
-  const buscarPosts = async () => {
-    await fetch("http://localhost:5017/postagem", {
-      method: "GET",
-    })
-      .then((response) => response.json())
-      .then((data) => setPosts(data))
-      .catch((error) => console.error("Erro ao buscar posts", error));
+  const buscarPosts = async (): Promise<Post[] | undefined> => {
+    try {
+      const response = await fetch("http://localhost:5017/postagem", {
+        method: "GET",
+      });
+      if (!response.ok) {
+        console.error("Erro ao buscar posts: Http ", response.status);
+        return undefined;
+      }
+      const data: Post[] = await response.json();
+      setPosts(data);
+      return data;
+    } catch (error) {
+      console.error(error);
+    }
   };
 
-  const atualizar = async (post: Post | null) => {
-    if (post == null) return;
-    const postAtual = await posts.find((p) => p.id === post.id);
-    console.log(postAtual);
-    setPostSelecionado(postAtual ?? null);
+  const atualizar = async (updatedPost: Post | null) => {
+    setPostSelecionado(updatedPost);
   };
 
   const abrirModalPostagem = (post: Post) => {
@@ -293,7 +308,7 @@ function Forum() {
           post={postSelecionado}
           onClose={fecharModalPostagem}
           onAdd={buscarPosts}
-          onUpdate={() => atualizar(postSelecionado)}
+          onUpdate={atualizar}
         />
       )}
       {modalNovaOpen && (
